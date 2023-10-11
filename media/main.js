@@ -86,7 +86,7 @@
             e.preventDefault();
             vscode.postMessage({
                 type: 'codeSelected',
-                value: 'ZZZZ' + this.innerText
+                value: this.innerText
             });
         });
 

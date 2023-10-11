@@ -299,13 +299,17 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
                 </style>
             </head>
             <body>
-                <input class="h-10 w-full text-white bg-stone-700 p-4 text-sm" placeholder="Ask ChatGPT (MetaPrompting edition) something" id="prompt-input" />
-                
-                <div id="response" class="pt-4 text-sm">
+<textarea rows="4" class="h-10 w-full text-white bg-stone-700 p-4 text-sm" placeholder="Ask ChatGPT (MetaPrompting edition) something" id="prompt-input" oninput="autoGrow(this)"></textarea>                  <div id="response" class="pt-4 text-sm">
                 </div>
 
                 <script src="${scriptUri}"></script>
-            </body>
+                <script>
+                    function autoGrow(element) {
+                        element.style.height = "5px";
+                        element.style.height = (element.scrollHeight)+"px";
+                    }
+                </script>
+                </body>
             </html>`;
     }
 
