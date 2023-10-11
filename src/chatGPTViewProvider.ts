@@ -76,7 +76,7 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
         _token: vscode.CancellationToken,
     ) {
         this._view = webviewView;
-
+    
         // set options for the webview, allow scripts
         webviewView.webview.options = {
             enableScripts: true,
@@ -84,10 +84,12 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
                 this._extensionUri
             ]
         };
-
+    
         // set the HTML for the webview
-        webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
-
+        let html = this._getHtmlForWebview(webviewView.webview);
+        html = this._addButtonsToCodeBlocks(html);  // Call the method here
+        webviewView.webview.html = html;
+    
         // add an event listener for messages received by the webview
         webviewView.webview.onDidReceiveMessage(data => {
             switch (data.type) {
@@ -109,6 +111,7 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
             }
         });
     }
+    
 
 
     public async resetConversation() {
@@ -129,19 +132,19 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
         if (!prompt) {
             prompt = '';
         }
-
+    
         // Check if the ChatGPTAPI instance is defined
         if (!this._chatGPTAPI) {
             this._newAPI();
         }
-
+    
         // focus gpt activity from activity bar
         if (!this._view) {
             await vscode.commands.executeCommand('chatgpt.chatView.focus');
         } else {
             this._view?.show?.(true);
         }
-
+    
         let response = '';
         this._response = '';
         // Get the selected text of the active editor
@@ -151,7 +154,8 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
         // If a user does not want to append this information to their prompt, leave it as an empty string
         const languageId = (this._settings.codeblockWithLanguageId ? vscode.window.activeTextEditor?.document?.languageId : undefined) || "";
         let searchPrompt = '';
-
+    
+        console.log('search(prompt: selection, selectedText', selection, selectedText)
         if (selection && selectedText) {
             // If there is a selection, add the prompt and the selected text to the search prompt
             if (this._settings.selectedInsideCodeblock) {
@@ -163,24 +167,30 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
             // Otherwise, just use the prompt if user typed it
             searchPrompt = prompt;
         }
-        this._fullPrompt = searchPrompt;
+    
+        // Add the required text to the prompt
+        // searchPrompt += "\nAlways print me full file. Always print full file paths before every file.";
+    
+        console.log('this._fullPrompt, _fullPrompt', this._fullPrompt)
 
+        this._fullPrompt = searchPrompt;
+    
         // Increment the message number
         this._currentMessageNumber++;
         let currentMessageNumber = this._currentMessageNumber;
-
+    
         if (!this._chatGPTAPI) {
             response = '[ERROR] "API key not set or wrong, please go to extension settings to set it (read README.md for more info)"';
         } else {
             // If successfully signed in
             console.log("sendMessage");
-
+    
             // Make sure the prompt is shown
             this._view?.webview.postMessage({type: 'setPrompt', value: this._prompt});
             this._view?.webview.postMessage({type: 'addResponse', value: '...'});
-
+    
             const agent = this._chatGPTAPI;
-
+    
             try {
                 // Send the search prompt to the ChatGPTAPI instance and store the response
                 const res = await agent.sendMessage(searchPrompt, {
@@ -199,25 +209,24 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
                     timeoutMs: (this._settings.timeoutLength || 60) * 1000,
                     ...this._conversation
                 });
-
+    
                 if (this._currentMessageNumber !== currentMessageNumber) {
                     return;
                 }
-
-
+    
                 console.log(res);
-
+    
                 response = res.text;
                 if (res.detail?.usage?.total_tokens) {
                     response += `\n\n---\n*<sub>Tokens used: ${res.detail.usage.total_tokens} (${res.detail.usage.prompt_tokens}+${res.detail.usage.completion_tokens})</sub>*`;
                 }
-
+    
                 if (this._settings.keepConversation) {
                     this._conversation = {
                         parentMessageId: res.id
                     };
                 }
-
+    
             } catch (e: any) {
                 console.error(e);
                 if (this._currentMessageNumber === currentMessageNumber) {
@@ -226,14 +235,14 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
                 }
             }
         }
-
+    
         if (this._currentMessageNumber !== currentMessageNumber) {
             return;
         }
-
+    
         // Saves the response
         this._response = response;
-
+    
         // Show the view and send a message to the webview with the response
         if (this._view) {
             this._view.show?.(true);
@@ -249,39 +258,91 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
         const showdownUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'scripts', 'tailwind.min.js'));
 
         return `<!DOCTYPE html>
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<script src="${tailwindUri}"></script>
-				<script src="${showdownUri}"></script>
-				<script src="${microlightUri}"></script>
-				<style>
-				.code {
-					white-space: pre;
-				}
-				p {
-					padding-top: 0.3rem;
-					padding-bottom: 0.3rem;
-				}
-				/* overrides vscodes style reset, displays as if inside web browser */
-				ul, ol {
-					list-style: initial !important;
-					margin-left: 10px !important;
-				}
-				h1, h2, h3, h4, h5, h6 {
-					font-weight: bold !important;
-				}
-				</style>
-			</head>
-			<body>
-				<input class="h-10 w-full text-white bg-stone-700 p-4 text-sm" placeholder="Ask ChatGPT something" id="prompt-input" />
-				
-				<div id="response" class="pt-4 text-sm">
-				</div>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <script src="${tailwindUri}"></script>
+                <script src="${showdownUri}"></script>
+                <script src="${microlightUri}"></script>
+                <style>
+                .code {
+                    white-space: pre;
+                }
+                p {
+                    padding-top: 0.3rem;
+                    padding-bottom: 0.3rem;
+                }
+                /* overrides vscodes style reset, displays as if inside web browser */
+                ul, ol {
+                    list-style: initial !important;
+                    margin-left: 10px !important;
+                }
+                h1, h2, h3, h4, h5, h6 {
+                    font-weight: bold !important;
+                }
+                .vscode-button {
+                    background-color: var(--vscode-button-background);
+                    color: var(--vscode-button-foreground);
+                    padding: 5px 10px;
+                    border: none;
+                    border-radius: 3px;
+                    margin-right: 10px;
+                    cursor: pointer;
+                }
+                .vscode-button:hover {
+                    background-color: var(--vscode-button-hoverBackground);
+                }
+                .vscode-button:active {
+                    background-color: var(--vscode-button-activeBackground);
+                }
+                </style>
+            </head>
+            <body>
+                <input class="h-10 w-full text-white bg-stone-700 p-4 text-sm" placeholder="Ask ChatGPT (MetaPrompting edition) something" id="prompt-input" />
+                
+                <div id="response" class="pt-4 text-sm">
+                </div>
 
-				<script src="${scriptUri}"></script>
-			</body>
-			</html>`;
+                <script src="${scriptUri}"></script>
+            </body>
+            </html>`;
+    }
+
+    private _addButtonsToCodeBlocks(html: string): string {
+        const codeBlockRegex = /<pre>\s*<code.*?>\s*([\s\S]*?)\s*<\/code>\s*<\/pre>/g;
+        let match;
+        let newHtml = html;
+        while ((match = codeBlockRegex.exec(html)) !== null) {
+            console.log('_addButtonsToCodeBlocks match', match)
+            const codeBlock = match[1];
+            const fullFilePath = vscode.window.activeTextEditor?.document.uri.fsPath;
+            const printFullFileButton = `<button class="vscode-button" onclick="printFullFile('${fullFilePath}')">Print Full File</button>`;
+            const printFileButton = `<button class="vscode-button" onclick="printFile('${fullFilePath}', '${codeBlock}')">Print File</button>`;
+            const newCodeBlock = `<pre><code class="microlight">${codeBlock}</code></pre><div>${printFullFileButton}${printFileButton}</div>`;
+            newHtml = newHtml.replace(match[0], newCodeBlock);
+        }
+        return newHtml;
+    }
+
+
+    public async printFullFile(filePath: string) {
+        const document = await vscode.workspace.openTextDocument(filePath);
+        const editor = await vscode.window.showTextDocument(document);
+        await vscode.commands.executeCommand('editor.action.selectAll');
+        await vscode.commands.executeCommand('editor.action.clipboardCopyAction');
+        await vscode.commands.executeCommand('workbench.action.files.saveAs');
+    }
+
+    public async printFile(filePath: string, code: string) {
+        const document = await vscode.workspace.openTextDocument(filePath);
+        const editor = await vscode.window.showTextDocument(document);
+        await editor.edit(editBuilder => {
+            editBuilder.insert(new vscode.Position(0, 0), code);
+        });
+        await vscode.commands.executeCommand('editor.action.selectAll');
+        await vscode.commands.executeCommand('editor.action.clipboardCopyAction');
+        await vscode.commands.executeCommand('workbench.action.files.saveAs');
+        await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
     }
 }

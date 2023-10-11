@@ -28,75 +28,91 @@
   });
 
   function fixCodeBlocks(response) {
-  // Use a regular expression to find all occurrences of the substring in the string
-  const REGEX_CODEBLOCK = new RegExp('\`\`\`', 'g');
-  const matches = response.match(REGEX_CODEBLOCK);
+    const REGEX_CODEBLOCK = new RegExp('\`\`\`', 'g');
+    const matches = response.match(REGEX_CODEBLOCK);
 
-  // Return the number of occurrences of the substring in the response, check if even
-  const count = matches ? matches.length : 0;
-  if (count % 2 === 0) {
-    return response;
-  } else {
-    // else append ``` to the end to make the last code block complete
-    return response.concat('\n\`\`\`');
-  }
-
+    const count = matches ? matches.length : 0;
+    if (count % 2 === 0) {
+      return response;
+    } else {
+      return response.concat('\n\`\`\`');
+    }
   }
 
   function setResponse() {
-        var converter = new showdown.Converter({
-          omitExtraWLInCodeBlocks: true, 
-          simplifiedAutoLink: true,
-          excludeTrailingPunctuationFromURLs: true,
-          literalMidWordUnderscores: true,
-          simpleLineBreaks: true
-        });
-        response = fixCodeBlocks(response);
-        html = converter.makeHtml(response);
-        document.getElementById("response").innerHTML = html;
+    var converter = new showdown.Converter({
+      omitExtraWLInCodeBlocks: true, 
+      simplifiedAutoLink: true,
+      excludeTrailingPunctuationFromURLs: true,
+      literalMidWordUnderscores: true,
+      simpleLineBreaks: true
+    });
+    response = fixCodeBlocks(response);
+    html = converter.makeHtml(response);
+    document.getElementById("response").innerHTML = html;
 
-        var preCodeBlocks = document.querySelectorAll("pre code");
-        for (var i = 0; i < preCodeBlocks.length; i++) {
-            preCodeBlocks[i].classList.add(
-              "p-2",
-              "my-2",
-              "block",
-              "overflow-x-scroll"
-            );
-        }
-        
-        var codeBlocks = document.querySelectorAll('code');
-        for (var i = 0; i < codeBlocks.length; i++) {
-            // Check if innertext starts with "Copy code"
-            if (codeBlocks[i].innerText.startsWith("Copy code")) {
-                codeBlocks[i].innerText = codeBlocks[i].innerText.replace("Copy code", "");
-            }
+    var preCodeBlocks = document.querySelectorAll("pre code");
+    for (var i = 0; i < preCodeBlocks.length; i++) {
+        preCodeBlocks[i].classList.add(
+          "p-2",
+          "my-2",
+          "block",
+          "overflow-x-scroll"
+        );
 
-            codeBlocks[i].classList.add("inline-flex", "max-w-full", "overflow-hidden", "rounded-sm", "cursor-pointer");
+        var btn = document.createElement("button");
+        btn.textContent = "Copy Code";
 
-            codeBlocks[i].addEventListener('click', function (e) {
-                e.preventDefault();
-                vscode.postMessage({
-                    type: 'codeSelected',
-                    value: this.innerText
-                });
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            vscode.postMessage({
+                type: 'codeSelected',
+                value: preCodeBlocks[i].innerText
             });
+        });
 
-            const d = document.createElement('div');
-            d.innerHTML = codeBlocks[i].innerHTML;
-            codeBlocks[i].innerHTML = null;
-            codeBlocks[i].appendChild(d);
-            d.classList.add("code");
+        preCodeBlocks[i].parentNode.insertBefore(btn, preCodeBlocks[i]);        
+    }
+
+    var codeBlocks = document.querySelectorAll('code');
+    for (var i = 0; i < codeBlocks.length; i++) {
+        if (codeBlocks[i].innerText.startsWith("Copy code")) {
+            codeBlocks[i].innerText = codeBlocks[i].innerText.replace("Copy code", "");
         }
 
-        microlight.reset('code');
+        codeBlocks[i].classList.add("inline-flex", "max-w-full", "overflow-hidden", "rounded-sm", "cursor-pointer");
 
-        //document.getElementById("response").innerHTML = document.getElementById("response").innerHTML.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+        codeBlocks[i].addEventListener('click', function (e) {
+            e.preventDefault();
+            vscode.postMessage({
+                type: 'codeSelected',
+                value: 'ZZZZ' + this.innerText
+            });
+        });
+
+        const d = document.createElement('div');
+        d.innerHTML = codeBlocks[i].innerHTML;
+        codeBlocks[i].innerHTML = null;
+        codeBlocks[i].appendChild(d);
+        d.classList.add("code");
+    }
+
+    microlight.reset('code');
+
+    // Create an "Apply" button after the response is set
+    var applyButton = document.createElement("button");
+    applyButton.textContent = "Apply";
+    applyButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        vscode.postMessage({
+            type: 'apply',
+        });
+    });
+    // Append the "Apply" button to the response element
+    document.getElementById("response").appendChild(applyButton);
   }
 
-  // Listen for keyup events on the prompt input element
   document.getElementById('prompt-input').addEventListener('keyup', function (e) {
-    // If the key that was pressed was the Enter key
     if (e.keyCode === 13) {
       vscode.postMessage({
         type: 'prompt',
