@@ -251,7 +251,6 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
     }
 
     private _getHtmlForWebview(webview: vscode.Webview) {
-    
         const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
         const microlightUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'scripts', 'microlight.min.js'));
         const tailwindUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'scripts', 'showdown.min.js'));
@@ -283,11 +282,12 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
                 }
                 .flex-container {
                     display: flex;
-                    flex-direction: column-reverse; 
+                    flex-direction: column-reverse;
                     height: 100%;
                 }
                 #response {
                     flex-grow: 1;
+                    overflow-y: auto;
                 }
                 .vscode-button {
                     background-color: var(--vscode-button-background);
@@ -307,13 +307,19 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
                 </style>
             </head>
             <body class="flex-container">
-                <div id="response" class="pt-4 text-sm"></div>
-                <textarea rows="4" class="h-10 w-full text-white bg-stone-700 p-4 text-sm" placeholder="Ask ChatGPT (MetaPrompting edition) something" id="prompt-input" oninput="autoGrow(this)"></textarea>
+                <div id="response" class="pt-4 text-sm"></div> 
+                <textarea rows="4" class="h-10 w-full text-white bg-stone-700 p-4 text-sm" placeholder="Ask ChatGPT (MetaPrompting edition) something" id="prompt-input" oninput="autoGrow(this)" onkeydown="handleEnter(event)"></textarea>
                 <script src="${scriptUri}"></script>
                 <script>
                     function autoGrow(element) {
                         element.style.height = "5px";
                         element.style.height = (element.scrollHeight)+"px";
+                    }
+    
+                    function handleEnter(event) {
+                        if (event.key === 'Enter' && !event.shiftKey) {
+                            event.preventDefault();
+                        }
                     }
                 </script>
                 </body>
