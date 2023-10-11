@@ -1,0 +1,13 @@
+--- package.json
++++ package.json
+@@ -160,7 +160,7 @@
+     },
+     "viewsContainers": {
+       "activitybar": [
+         {
+           "id": "chatgpt",
+-          "title": "ChatGPT",
++          "title": "chatGPT - MetaPrompt",
+           "icon": "resources/icon.png"
+         }
+       ]
