@@ -1,7 +1,7 @@
 export type AuthInfo = { apiKey?: string };
 export type Settings = {
     selectedInsideCodeblock?: boolean,
-    codeblockWithLanguageId?: false,
+    codeblockWithLanguageId?: boolean,
     pasteOnClick?: boolean,
     keepConversation?: boolean,
     timeoutLength?: number,

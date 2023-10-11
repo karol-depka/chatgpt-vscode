@@ -1,50 +1,56 @@
 import * as vscode from 'vscode';
-import {BASE_URL, ChatGPTViewProvider} from "./chatGPTViewProvider";
-
-
+import { BASE_URL, ChatGPTViewProvider } from "./chatGPTViewProvider";
 
 export function activate(context: vscode.ExtensionContext) {
-
 	console.log('activating extension "chatgpt"');
-	// Get the settings from the extension's configuration
-	const config = vscode.workspace.getConfiguration('chatgpt');
+	const provider = initializeProvider(context);
+	registerCommands(context, provider);
+	handleConfigurationChanges(provider);
+}
 
-	// Create a new ChatGPTViewProvider instance and register it with the extension's context
+function initializeProvider(context: vscode.ExtensionContext): ChatGPTViewProvider {
+	const config = vscode.workspace.getConfiguration('chatgpt');
 	const provider = new ChatGPTViewProvider(context.extensionUri);
 
-	// Put configuration settings into the provider
 	provider.setAuthenticationInfo({
-		apiKey: config.get('apiKey')
+		apiKey: config.get<string>('apiKey')
 	});
 	provider.setSettings({
-		selectedInsideCodeblock: config.get('selectedInsideCodeblock') || false,
-		codeblockWithLanguageId: config.get('codeblockWithLanguageId') || false,
-		pasteOnClick: config.get('pasteOnClick') || false,
-		keepConversation: config.get('keepConversation') || false,
-		timeoutLength: config.get('timeoutLength') || 60,
-		apiUrl: config.get('apiUrl') || BASE_URL,
-		model: config.get('model') || 'gpt-3.5-turbo'
+		selectedInsideCodeblock: config.get<boolean>('selectedInsideCodeblock') || false,
+		codeblockWithLanguageId: config.get<boolean>('codeblockWithLanguageId') || false,
+		pasteOnClick: config.get<boolean>('pasteOnClick') || false,
+		keepConversation: config.get<boolean>('keepConversation') || false,
+		timeoutLength: config.get<number>('timeoutLength') || 60,
+		apiUrl: config.get<string>('apiUrl') || BASE_URL,
+		model: config.get<string>('model') || 'gpt-3.5-turbo'
 	});
 
-	// Register the provider with the extension's context
 	context.subscriptions.push(
-		vscode.window.registerWebviewViewProvider(ChatGPTViewProvider.viewType, provider,  {
+		vscode.window.registerWebviewViewProvider(ChatGPTViewProvider.viewType, provider, {
 			webviewOptions: { retainContextWhenHidden: true }
 		})
 	);
 
+	return provider;
+}
 
-	const commandHandler = (command:string) => {
+function registerCommands(context: vscode.ExtensionContext, provider: ChatGPTViewProvider): void {
+	const commandHandler = (command: string) => {
 		const config = vscode.workspace.getConfiguration('chatgpt');
-		const prompt = config.get(command) as string;
-		provider.search(prompt);
+		const prompt = config.get<string>(command);
+		if (prompt) {
+			provider.search(prompt);
+		}
 	};
 
-	// Register the commands that can be called from the extension's package.json
 	context.subscriptions.push(
-		vscode.commands.registerCommand('chatgpt.ask', () => 
+		vscode.commands.registerCommand('chatgpt.ask', () =>
 			vscode.window.showInputBox({ prompt: 'What do you want to do?' })
-			.then((value) => provider.search(value))
+				.then((value) => {
+					if (value) {
+						provider.search(value);
+					}
+				})
 		),
 		vscode.commands.registerCommand('chatgpt.explain', () => commandHandler('promptPrefix.explain')),
 		vscode.commands.registerCommand('chatgpt.refactor', () => commandHandler('promptPrefix.refactor')),
@@ -53,39 +59,30 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('chatgpt.documentation', () => commandHandler('promptPrefix.documentation')),
 		vscode.commands.registerCommand('chatgpt.resetConversation', () => provider.resetConversation())
 	);
+}
 
-
-	// Change the extension's session token or settings when configuration is changed
+function handleConfigurationChanges(provider: ChatGPTViewProvider): void {
 	vscode.workspace.onDidChangeConfiguration((event: vscode.ConfigurationChangeEvent) => {
+		const config = vscode.workspace.getConfiguration('chatgpt');
 		if (event.affectsConfiguration('chatgpt.apiKey')) {
-			const config = vscode.workspace.getConfiguration('chatgpt');
-			provider.setAuthenticationInfo({apiKey: config.get('apiKey')});
-		}else if (event.affectsConfiguration('chatgpt.apiUrl')) {
-			const config = vscode.workspace.getConfiguration('chatgpt');
-			let url = config.get('apiUrl')as string || BASE_URL;
+			provider.setAuthenticationInfo({ apiKey: config.get<string>('apiKey') });
+		} else if (event.affectsConfiguration('chatgpt.apiUrl')) {
+			let url = config.get<string>('apiUrl') || BASE_URL;
 			provider.setSettings({ apiUrl: url });
 		} else if (event.affectsConfiguration('chatgpt.model')) {
-			const config = vscode.workspace.getConfiguration('chatgpt');
-			provider.setSettings({ model: config.get('model') || 'gpt-3.5-turbo' }); 
+			provider.setSettings({ model: config.get<string>('model') || 'gpt-3.5-turbo' });
 		} else if (event.affectsConfiguration('chatgpt.selectedInsideCodeblock')) {
-			const config = vscode.workspace.getConfiguration('chatgpt');
-			provider.setSettings({ selectedInsideCodeblock: config.get('selectedInsideCodeblock') || false });
+			provider.setSettings({ selectedInsideCodeblock: config.get<boolean>('selectedInsideCodeblock') || false });
 		} else if (event.affectsConfiguration('chatgpt.codeblockWithLanguageId')) {
-			const config = vscode.workspace.getConfiguration('chatgpt');
-			provider.setSettings({ codeblockWithLanguageId: config.get('codeblockWithLanguageId') || false });
+			provider.setSettings({ codeblockWithLanguageId: config.get<boolean>('codeblockWithLanguageId') || false });
 		} else if (event.affectsConfiguration('chatgpt.pasteOnClick')) {
-			const config = vscode.workspace.getConfiguration('chatgpt');
-			provider.setSettings({ pasteOnClick: config.get('pasteOnClick') || false });
+			provider.setSettings({ pasteOnClick: config.get<boolean>('pasteOnClick') || false });
 		} else if (event.affectsConfiguration('chatgpt.keepConversation')) {
-			const config = vscode.workspace.getConfiguration('chatgpt');
-			provider.setSettings({ keepConversation: config.get('keepConversation') || false });
+			provider.setSettings({ keepConversation: config.get<boolean>('keepConversation') || false });
 		} else if (event.affectsConfiguration('chatgpt.timeoutLength')) {
-			const config = vscode.workspace.getConfiguration('chatgpt');
-			provider.setSettings({ timeoutLength: config.get('timeoutLength') || 60 });
+			provider.setSettings({ timeoutLength: config.get<number>('timeoutLength') || 60 });
 		}
 	});
 }
 
-
-// This method is called when your extension is deactivated
 export function deactivate() {}
