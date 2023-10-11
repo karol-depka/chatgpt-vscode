@@ -251,12 +251,12 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
     }
 
     private _getHtmlForWebview(webview: vscode.Webview) {
-
+    
         const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
         const microlightUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'scripts', 'microlight.min.js'));
         const tailwindUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'scripts', 'showdown.min.js'));
         const showdownUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'scripts', 'tailwind.min.js'));
-
+    
         return `<!DOCTYPE html>
             <html lang="en">
             <head>
@@ -281,6 +281,14 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
                 h1, h2, h3, h4, h5, h6 {
                     font-weight: bold !important;
                 }
+                .flex-container {
+                    display: flex;
+                    flex-direction: column-reverse; 
+                    height: 100%;
+                }
+                #response {
+                    flex-grow: 1;
+                }
                 .vscode-button {
                     background-color: var(--vscode-button-background);
                     color: var(--vscode-button-foreground);
@@ -298,10 +306,9 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
                 }
                 </style>
             </head>
-            <body>
-<textarea rows="4" class="h-10 w-full text-white bg-stone-700 p-4 text-sm" placeholder="Ask ChatGPT (MetaPrompting edition) something" id="prompt-input" oninput="autoGrow(this)"></textarea>                  <div id="response" class="pt-4 text-sm">
-                </div>
-
+            <body class="flex-container">
+                <div id="response" class="pt-4 text-sm"></div>
+                <textarea rows="4" class="h-10 w-full text-white bg-stone-700 p-4 text-sm" placeholder="Ask ChatGPT (MetaPrompting edition) something" id="prompt-input" oninput="autoGrow(this)"></textarea>
                 <script src="${scriptUri}"></script>
                 <script>
                     function autoGrow(element) {
