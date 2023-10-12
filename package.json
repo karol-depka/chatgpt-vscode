@@ -167,7 +167,7 @@
           "default": "https://api.openai.com/v1",
           "order": 1
         },
-        "chatgpt.model": {
+                  "chatgpt.model": {
           "type": "string",
           "enum": [
             "gpt-3.5-turbo",
@@ -270,6 +270,7 @@
   },
   "dependencies": {
     "chatgpt": "^5.2.2",
+    "diff-match-patch": "^1.0.5",
     "gpt3-tokenizer": "^1.1.5",
     "node-fetch": "^3.3.0"
   }
