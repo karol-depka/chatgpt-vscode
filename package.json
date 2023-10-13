@@ -167,7 +167,7 @@
           "default": "https://api.openai.com/v1",
           "order": 1
         },
-                  "chatgpt.model": {
+        "chatgpt.model": {
           "type": "string",
           "enum": [
             "gpt-3.5-turbo",
@@ -236,6 +236,12 @@
           "default": true,
           "description": "Append language id of the selected code to the codeblock (```language...code...```)",
           "order": 11
+        },
+        "chatgpt.xxyy": {
+          "type": "boolean",
+          "default": false,
+          "description": "New config option of type boolean; TEST",
+          "order": 12
         }
       }
     }
@@ -272,6 +278,7 @@
     "chatgpt": "^5.2.2",
     "diff-match-patch": "^1.0.5",
     "gpt3-tokenizer": "^1.1.5",
-    "node-fetch": "^3.3.0"
+    "node-fetch": "^3.3.0",
+    "simple-git": "^3.20.0"
   }
 }

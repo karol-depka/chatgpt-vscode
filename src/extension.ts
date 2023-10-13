@@ -64,6 +64,7 @@ function registerCommands(context: vscode.ExtensionContext, provider: ChatGPTVie
 function handleConfigurationChanges(provider: ChatGPTViewProvider): void {
 	vscode.workspace.onDidChangeConfiguration((event: vscode.ConfigurationChangeEvent) => {
 		const config = vscode.workspace.getConfiguration('chatgpt');
+		// added2
 		if (event.affectsConfiguration('chatgpt.apiKey')) {
 			provider.setAuthenticationInfo({ apiKey: config.get<string>('apiKey') });
 		} else if (event.affectsConfiguration('chatgpt.apiUrl')) {
