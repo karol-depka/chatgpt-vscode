@@ -1,8 +1,11 @@
 .DS_Store
 
+.env
+
 out
 dist
 node_modules
 node_modules_OFF
+node_modules_tiktoken_missing
 .vscode-test/
 *.vsix

@@ -10,11 +10,13 @@
   },
   "keywords": [],
   "author": "karol",
-  "license": "other",
+  "license": "AGPL-3.0-only",
   "dependencies": {
     "@types/node": "^version",
-    "typescript": "^version",
-    "ts-node": "^version"
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "ts-node": "^version",
+    "typescript": "^version"
   },
   "bin": {
     "my-cli": "./dist/index.js"
