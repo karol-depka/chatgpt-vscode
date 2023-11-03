@@ -1,4 +1,3 @@
-"use strict";
 import OpenAI from "openai";
 import dotenv from "dotenv";
 import { performance } from "perf_hooks";
@@ -14,26 +13,27 @@ const green = "\x1b[32m";
 const reset = "\x1b[0m";
 
 console.log(yellow + "Welcome to MetaPrompting Technology" + reset);
-dotenv.config();
+
 dotenv.config();
 
 console.log("initializing OpenAI");
-const openai = new OpenAI({
+const inputFilePath = process.argv[2];
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 const filePath = `src/index_openai.ts`;
-const origFileContent = fs.readFileSync(filePath, { encoding: "utf8", flag: "r" });
+const origFileContent = fs.readFileSync(filePath, "utf8");
 console.log(blue + `original file content:${origFileContent}` + "\x1b[0m");
 
 async function main() {
   
-  const userPrompt = `read userPrompt from CLI arg`;
+  // const userPrompt = `make it say hello Earth. Add nice terminal colors. Store color control sequences in const-s.`;
+  const userPrompt = `get filePath from CLI argument; and rename that const to inputFilePath`;
 
-\`\`\`typescript
-  const promptText = `Given this file: 
+
+  const promptText = `Given this file:
 File: ${filePath} :
-\`\`\`
+\`\`\`typescript
 ${origFileContent}
 \`\`\`
     ${userPrompt}
@@ -42,9 +42,10 @@ ${origFileContent}
 
     
     Print me the output as .patch file that can be automatically applied. The patch should contain proper indentation.
-    Always print me only the patches (each patch surrounded by markdown \`\`\`diff). Never print full file contents.
+    Just print the file patches. No explanations, no pleasantries, no prelude. 
     Always print me only the patches (each patch surrounded by markdown \`\`\`). Never print full file contents.
     If there are source code comments in the file, keep them.
+    Modify minimum number of lines.
     Before each file you output, provide full file path.`;
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: "user", content: promptText }],
@@ -53,7 +54,7 @@ ${origFileContent}
     temperature: 0,
   });
 
-  // console.debug(`chatCompletion.choices:`, chatCompletion.choices);
+  // console.debug(`chatCompletion.choices`, chatCompletion.choices);
   const responseContent = chatCompletion.choices[0].message.content;
   // console.debug(`chatCompletion.choices...`, responseContent);
   console.log(green + `responseContent:${responseContent}` + "\x1b[0m");
@@ -61,7 +62,7 @@ ${origFileContent}
   // console.debug(`responsePatch:` + green + responsePatch + "\x1b[0m");
   console.debug(`responsePatch:`);
   printColoredDiff(responsePatch);
-  const patched = applyPatchViaStrings(responsePatch, origFileContent); // WARNING: PATCH IS FIRST ARG, then ORIG content
+  const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patched: \n \n", patched);
 
   const patchedFilePath = filePath.replace(".ts", ".patched.ts");
@@ -69,7 +70,7 @@ ${origFileContent}
   fs.writeFileSync(patchedFilePath, patched);
 
   const end = performance.now();
-  // console.log(`Total time taken: ${end - start} ms.`);
+  //   console.log(`Total time taken: ${end - start} ms.`);
 
   // https://openai.com/pricing
 
