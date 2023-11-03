@@ -27,7 +27,8 @@ console.log(blue + `original file content:${origFileContent}` + "\x1b[0m");
 
 async function main() {
   
-  const userPrompt = `Split the costs token into input, output, total. Apply different price for input and output tokens`;
+  // const userPrompt = `make it say hello Earth. Add nice terminal colors. Store color control sequences in const-s.`;
+  const userPrompt = `get filePath from CLI argument; and rename that const to inputFilePath`;
 
 
   const promptText = `Given this file: 
@@ -44,6 +45,7 @@ ${origFileContent}
     Just print the file patches. No explanations, no pleasantries, no prelude. 
     Always print me only the patches (each patch surrounded by markdown \`\`\`). Never print full file contents.
     If there are source code comments in the file, keep them.
+    Modify minimum number of lines.
     Before each file you output, provide full file path.`;
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: "user", content: promptText }],
