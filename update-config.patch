@@ -1,0 +1,16 @@
+--- a/package.json
++++ b/package.json
+@@ -162,6 +162,11 @@
+         "chatgpt.xxyy": {
+           "type": "boolean",
+           "default": false,
+           "description": "New config option of type boolean; TEST",
+           "order": 12
++        },
++        "chatgpt.testFromChatGPT": {
++          "type": "string",
++          "description": "Test From ChatGPT",
++          "order": 13
+         }
+       }
+     }

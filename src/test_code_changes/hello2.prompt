@@ -1,0 +1,12 @@
+Change it to 99 repetitions. Print result as .patch. 
+Within each iteration, print 7 times "hi".
+
+Don't output any explanation. Just give me the patch.
+
+File: hello.ts:
+```
+for (let i = 1; i <= 10; i++) {
+    console.log(`Hello World ${i}`);
+}
+
+```
