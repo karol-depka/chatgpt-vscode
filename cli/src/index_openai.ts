@@ -39,16 +39,19 @@ async function main() {
 
   //     put it in a loop to execute 7 times. On odd iterations, it should print "odd!" and then print "odd it is". Wrap the whole code into a function and call it.
 
+  const userPrompt = `
+    At the start of the program, print a welcome message in nice terminal colors - red and yellow colors. 
+    Print original file contents in blue.
+    Print new file contents in green.
+    Remember to switch color back to default. Without external libraries.
+`;
+
   const promptText = `Given this file: 
 File: ${filePath} :
 \`\`\`
 ${origFileContent}
 \`\`\`
-    At the start of the program, print a welcome message in nice terminal colors - red and yellow colors. 
-    Print original file contents in blue.
-    Print new file contents in green.
-    Remember to switch color back to default. Without external libraries.
-
+    ${userPrompt}
     =====
 
     Print me the output as .patch file that can be automatically applied. The patch should contain proper indentation.
