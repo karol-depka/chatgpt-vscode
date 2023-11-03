@@ -13,4 +13,5 @@
 // -
 // -`;
 // export const userPrompt = `make the code be showing response via streaming in realtime, as it arrives`;
+
 export const userPrompt = `make a loop to repeat the greeting 3 times`;

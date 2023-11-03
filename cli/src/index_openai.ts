@@ -11,7 +11,7 @@ import { extractCodeFromMarkdown } from "./utils/markdown/markdown_utils";
 import { customGuidelines } from "./utils/prompting/custom_guidelines";
 import { formattingGuidelines } from "./utils/prompting/formattingGuidelines";
 import { yellow, reset, blue, green, red } from "./utils/colors";
-import { userPrompt } from "./utils/prompting/userPrompt";
+// import { userPrompt } from "./utils/prompting/userPrompt";
 import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 import { showCosts } from "./utils/openai/pricingCalc";
 import { makeCodeBlockForPrompt } from "./utils/markdown/generateMarkdown";
@@ -21,6 +21,7 @@ import {readFileFromPath} from "./utils/fs/fsUtils";
 console.log(yellow + "Welcome to " + red + " MetaPrompting Technology" + reset);
 
 dotenv.config();
+const userPrompt = process.argv[3] as string // || userPrompt;
 
 const inputFilePath = process.argv[2] as FilePathStr;
 console.log(blue + "inputFilePath: " + reset, inputFilePath);
