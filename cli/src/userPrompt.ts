@@ -3,4 +3,10 @@
 // export const userPrompt = `Refactor into smaller functions, especially: checking git status, calculation of cost`;
 // export const userPrompt = `Refactor: extract function for calculation of cost`;
 // export const userPrompt = `Make the openai response show in realtime via streaming`;
-export const userPrompt = `make it take into account different price of input tokens and output tokens (show counts and total and price)`;
+// export const userPrompt = `make it take into account different price of input tokens and output tokens (show counts and total and price)`;
+export const userPrompt = `Take prices from this table: (add the table as comment too)
+Model	Input	Output
+8K context	$0.03 / 1K tokens	$0.06 / 1K tokens
+32K context	$0.06 / 1K tokens	$0.12 / 1K tokens
+
+`;

@@ -6,8 +6,8 @@ export function showCosts(chatCompletion: OpenAI.Chat.Completions.ChatCompletion
   const tokensUsed = chatCompletion!.usage!.total_tokens;
   const inputTokens = chatCompletion!.usage!.prompt_tokens;
   const outputTokens = tokensUsed - inputTokens;
-  const inputTokenPrice = 0.06;
-  const outputTokenPrice = 0.06;
+  const inputTokenPrice = 0.03; // $0.03 / 1K tokens for 8K context, $0.06 / 1K tokens for 32K context
+  const outputTokenPrice = 0.06; // $0.06 / 1K tokens for 8K context, $0.12 / 1K tokens for 32K context
 
   console.log(`Input tokens: ${inputTokens}`);
   console.log(`Output tokens: ${outputTokens}`);
@@ -18,6 +18,6 @@ export function showCosts(chatCompletion: OpenAI.Chat.Completions.ChatCompletion
   console.log(`Input cost: $${inputCost.toFixed(2)}`);
   console.log(`Output cost: $${outputCost.toFixed(2)}`);
   console.log(`Total cost: $${totalCost.toFixed(2)}`);
-  const costInDollars = (tokensUsed * 0.06) / 1000; // assuming $0.06 per token
-  console.log(`Cost in dollars: $${costInDollars.toFixed(2)}`);
+//   const costInDollars = (tokensUsed * 0.06) / 1000; // assuming $0.06 per token
+//   console.log(`Cost in dollars: $${costInDollars.toFixed(2)}`);
 }
