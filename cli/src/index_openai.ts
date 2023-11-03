@@ -35,17 +35,18 @@ console.log(`original file content:${origFileContent}`);
 async function main() {
   //     print iteration numbers in the inner loop. Remove printing iteration number in the outer loop. Change divisibility from odd to div by 3.
 
+  //     make it say hello Earth
+
   const promptText = `Given this file: 
 File: ${filePath} :
 \`\`\`
 ${origFileContent}
 \`\`\`
-    make it say hello Earth
+    put it in a loop to execute 3 times
     =====
     Print me the output as .patch file that can be automatically applied.
     Just print the file patches. No explanations, no pleasantries, no prelude.
-    Before each file you output, provide full file path.
-    `;
+    Before each file you output, provide full file path.`;
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: "user", content: promptText }],
     // model: "gpt-3.5-turbo",
