@@ -62,14 +62,14 @@ ${origFileContent}
   // console.debug(`responsePatch:` + green + responsePatch + "\x1b[0m");
   console.debug(`responsePatch:`);
   printColoredDiff(responsePatch);
-  const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
-  console.info("patched: \n \n", patched);
+  const patchedFileContents = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
+  console.info("patchedFileContents: \n \n", patchedFileContents);
 
   const patchedFilePath = inputFilePath; // inputFilePath.replace(".ts", ".patched.ts");
   console.log("will write file (after checking git status) - patchedFilePath: ", patchedFilePath);
   checkFileNotModifiedInGitOrThrow(inputFilePath); // just before writing - check again git status
 
-  fs.writeFileSync(patchedFilePath, patched);
+  fs.writeFileSync(patchedFilePath, patchedFileContents);
 
   const end = performance.now();
   //   console.log(`Total time taken: ${end - start} ms.`);
