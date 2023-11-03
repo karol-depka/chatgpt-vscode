@@ -9,6 +9,7 @@ import {
 } from "./utils/apply_patch";
 import { extractCodeFromMarkdown } from "./utils/markdown_utils";
 import { customGuidelines } from "./custom_guidelines";
+import { formattingGuidelines } from "./formattingGuidelines";
 
 const red = "\x1b[31m";
 const yellow = "\x1b[33m";
@@ -44,13 +45,6 @@ async function main() {
   // const userPrompt = `add logging to file called log.log. Use a library like winston. Make sure logs are appended, not overwritten. Make sure output still goes to the console.`;
   const userPrompt = `Check if inputFilePath file has uncommitted changes in git status. Throw exception if so.`;
 
-  // could run various combinations on those, automatically
-  const formattingGuidelines = [
-    `Modify minimum number of lines.`,
-    `Do not make unrelated changes to the file`,
-    `Ensure that the patch is valid`,
-    // `Ensure that if you want to modify a line, it is prefixed`. // Could prefix with star or something. Could fuzzy-apply lines not matching context, as changed lines - it's what GPT4 does sometimes
-  ];
 
   const promptText = `Given this file:
 File: ${inputFilePath} :
@@ -61,15 +55,9 @@ ${origFileContent}
     =====
     ${customGuidelines.join("\n\n")}
 
-    
-    Print me the output as .patch file that can be automatically applied. The patch should contain proper indentation.
-    Just print the file patches. No explanations, no pleasantries, no prelude. 
-    Always print me only the patches (each patch surrounded by markdown \`\`\`). Never print full file contents.
-    If there are source code comments in the file, keep them.
+    ==== Output formatting guidelines:
     ${formattingGuidelines.join("\n\n")}
-
-    
-    Before each file you output, provide full file path.`;
+`;
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: "user", content: promptText }],
     // model: "gpt-3.5-turbo",
