@@ -124,7 +124,7 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
                                 vscode.window.showWarningMessage(folderPath + ' has uncommitted changes');
                             }
                             console.log('folderPath', folderPath);
-                            }
+                        }
                     });
 
                     // })
