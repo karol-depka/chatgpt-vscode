@@ -27,12 +27,12 @@ console.log(blue + `original file content:${origFileContent}` + "\x1b[0m");
 
 async function main() {
   
-  const userPrompt = `make it say hello Earth. Add nice terminal colors. Store color control sequences in const-s.`;
+  const userPrompt = `Split the costs token into input, output, total. Apply different price for input and output tokens`;
 
 
   const promptText = `Given this file: 
 File: ${filePath} :
-\`\`\`
+\`\`\`typescript
 ${origFileContent}
 \`\`\`
     ${userPrompt}
