@@ -1,4 +1,3 @@
-import OpenAI from "openai";
 import dotenv from "dotenv";
 import { execSync } from "child_process";
 import { performance } from "perf_hooks";
@@ -7,17 +6,12 @@ import {
   applyPatchToViaStrings as applyPatchViaStrings, patchFileIfSafeOrThrow,
   printColoredDiff,
 } from "./utils/patching/apply_patch";
-import { extractCodeFromMarkdown } from "./utils/markdown/markdown_utils";
-import { customGuidelines } from "./utils/prompting/custom_guidelines";
-import { formattingGuidelines } from "./utils/prompting/formattingGuidelines";
 import { yellow, reset, blue, green, red } from "./utils/colors";
-// import { userPrompt } from "./utils/prompting/userPrompt";
 import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 import { showCosts } from "./utils/openai/pricingCalc";
 import { makeCodeBlockForPrompt } from "./utils/markdown/generateMarkdown";
 import {MPFilePath, MPFileContent, PatchContentStr, MPFullPrompt, MPUserPrompt} from "./utils/types";
 import {readFileFromPath} from "./utils/fs/fsUtils";
-import {makePrompt} from "./utils/prompting/makePrompt";
 import {FileToPatch} from "./utils/patching/types";
 import { makeAndSendFullPrompt } from "./utils/openai/sendPrompt";
 
