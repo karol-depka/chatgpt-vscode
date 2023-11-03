@@ -5,9 +5,11 @@ const reset = '\x1b[0m';
 
 for(let i = 0; i < 3; i++) {
   if(i % 2 == 0) console.log(red, 'hello earth') // red
-console.debug('bye')
-console.log(blueBold, 'goodbye\x1b[0m') // blue, bold
-console.log(blueBold, 'goodbye\x1b[0m') // blue, bold
+  if(i == 2) {
+    console.debug('bye')
+    console.log(blueBold, 'goodbye\x1b[0m') // blue, bold
+    console.log(blueBold, 'goodbye\x1b[0m') // blue, bold
+  }
 console.log(reset) // reset color
 }
 // end
