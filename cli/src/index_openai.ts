@@ -2,6 +2,8 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 import { performance } from "perf_hooks";
 import fs from "fs";
+import { applyPatchToViaStrings } from "./apply_patch";
+import { extractCodeFromMarkdown } from "./utils/markdown_utils";
 
 dotenv.config();
 
@@ -50,7 +52,11 @@ ${fileContent}
   });
 
   console.debug(`chatCompletion.choices`, chatCompletion.choices);
-  console.debug(`chatCompletion.choices...`, chatCompletion.choices[0].message.content);
+  const responseContent = chatCompletion.choices[0].message.content;
+  console.debug(`chatCompletion.choices...`, responseContent);
+  const responsePatch = extractCodeFromMarkdown(responseContent!);
+  const patched = applyPatchToViaStrings(fileContent, responsePatch);
+  console.info("patched: \n \n", patched);
 
       const end = performance.now();
     //   console.log(`Total time taken: ${end - start} ms.`);
