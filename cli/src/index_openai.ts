@@ -46,6 +46,12 @@ async function main() {
     Remember to switch color back to default. Without external libraries.
 `;
 
+const customGuidelines = [
+  `Use strictest TypeScript settings in the code you generate.`,
+  // `Generate unit tests`,
+  // `Use newest libraries, API-s and language settings and style.`
+];
+
   const promptText = `Given this file: 
 File: ${filePath} :
 \`\`\`
@@ -53,7 +59,8 @@ ${origFileContent}
 \`\`\`
     ${userPrompt}
     =====
-
+    ${customGuidelines.join("\n")}
+    
     Print me the output as .patch file that can be automatically applied. The patch should contain proper indentation.
     Just print the file patches. No explanations, no pleasantries, no prelude.
     Before each file you output, provide full file path.`;

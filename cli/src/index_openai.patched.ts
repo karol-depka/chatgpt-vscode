@@ -1,8 +1,3 @@
-const red = "\x1b[31m";
-const yellow = "\x1b[33m";
-const blue = "\x1b[34m";
-const green = "\x1b[32m";
-const reset = "\x1b[0m";
 import OpenAI from "openai";
 import dotenv from "dotenv";
 import { performance } from "perf_hooks";
@@ -13,8 +8,6 @@ import { extractCodeFromMarkdown } from "./utils/markdown_utils";
 dotenv.config();
 
 console.log('initializing OpenAI')
-console.log(`${red}${yellow}Welcome to the program!${reset}`);
-console.log(`${blue}Original file content:${origFileContent}${reset}`);
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -46,16 +39,19 @@ async function main() {
 
   //     put it in a loop to execute 7 times. On odd iterations, it should print "odd!" and then print "odd it is". Wrap the whole code into a function and call it.
 
+  const userPrompt = `
+    At the start of the program, print a welcome message in nice terminal colors - red and yellow colors. 
+    Print original file contents in blue.
+    Print new file contents in green.
+    Remember to switch color back to default. Without external libraries.
+`;
+
   const promptText = `Given this file: 
 File: ${filePath} :
 \`\`\`
 ${origFileContent}
 \`\`\`
-    At the start of the program, print a welcome message in nice terminal colors - red and yellow colors. 
-    Print original file contents in blue.
-    Print new file contents in green.
-    Remember to switch color back to default. Without external libraries.
-
+    ${userPrompt}
     =====
 
     Print me the output as .patch file that can be automatically applied. The patch should contain proper indentation.
@@ -75,7 +71,6 @@ ${origFileContent}
   console.debug(`responsePatch:` + responsePatch);
   const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patched: \n \n", patched);
-  console.log(`${green}New file content:${patched}${reset}`);
 
   const patchedFilePath = filePath.replace(".ts", ".patched.ts");
   console.log("patchedFilePath", patchedFilePath);
