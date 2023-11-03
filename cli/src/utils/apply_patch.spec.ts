@@ -1,4 +1,4 @@
-import { applyPatch, applyPatchToViaStrings } from './utils/apply_patch'; // replace with your actual module name
+import { applyPatch, applyPatchToViaStrings } from './apply_patch'; // replace with your actual module name
 
 describe('Patch tests', () => {
     test('Empty patch and original content', () => {
@@ -11,6 +11,42 @@ describe('Patch tests', () => {
 +This is a new line
  This is an existing line
 +This is another new line`;
+        const result = applyPatchToViaStrings(patchContent, '');
+        expect(result).toBe(patchContent);
+    });
+
+    test('hello7 from openai', () => {
+        const origContent = `const startTime = Date.now();
+
+for (let i = 1; i <= 99; i++) {
+  console.log(\`Iteration: \${i}\`);
+  if (i % 2 === 0) {
+    for (let j = 0; j < 7; j++) {
+      console.log(\`hi\`);
+    }
+  }
+}
+
+console.log(\`Total time taken: \${Date.now() - startTime}ms\`);
+`
+        const patchContent = `--- a/examples/hello7/hello.ts
++++ b/examples/hello7/hello.ts
+@@ -1,12 +1,12 @@
+ const startTime = Date.now();
+
+ for (let i = 1; i <= 99; i++) {
+-  console.log(\`Iteration: \${i}\`);
+-  if (i % 2 === 0) {
++  if (i % 3 === 0) {
+     for (let j = 0; j < 7; j++) {
+-      console.log(\`hi\`);
++      console.log(\`Iteration: \${j}\`);
+     }
+   }
+ }
+
+ console.log(\`Total time taken: \${Date.now() - startTime}ms\`);`;
+
         const result = applyPatchToViaStrings(patchContent, '');
         expect(result).toBe(patchContent);
     });

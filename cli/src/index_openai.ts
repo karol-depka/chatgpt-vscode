@@ -14,8 +14,10 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const filePath = `examples/hello7/hello.ts`;
+// const filePath = `examples/hello7/hello.ts`;
+const filePath = `examples/hello_simple/hello.ts`;
 const fileContent = fs.readFileSync(filePath, "utf8");
+console.log(`original file content:${fileContent}`);
 // const fileContent = `const startTime = Date.now();
 
 // for (let i = 1; i <= 99; i++) {
@@ -31,19 +33,19 @@ const fileContent = fs.readFileSync(filePath, "utf8");
 // `
 
 async function main() {
-    const promptText = `Given this file: 
+  //     print iteration numbers in the inner loop. Remove printing iteration number in the outer loop. Change divisibility from odd to div by 3.
+
+  const promptText = `Given this file: 
 File: ${filePath}
 \`\`\`
 ${fileContent}    
 \`\`\`
-
-    print iteration numbers in the inner loop. Remove printing iteration number in the outer loop. Change divisibility from odd to div by 3.
+    make it say hello Earth
     =====
     Print me the output as .patch file that can be automatically applied.
     Just print the file patches. No explanations, no pleasantries, no prelude.
     Before each file you output, provide full file path.
     `;
-;
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: "user", content: promptText }],
     // model: "gpt-3.5-turbo",
@@ -55,18 +57,18 @@ ${fileContent}
   const responseContent = chatCompletion.choices[0].message.content;
   console.debug(`chatCompletion.choices...`, responseContent);
   const responsePatch = extractCodeFromMarkdown(responseContent!);
-  console.debug(`responsePatch:`, responsePatch);
+  console.debug(`responsePatch:` + responsePatch);
   const patched = applyPatchViaStrings(fileContent, responsePatch);
   console.info("patched: \n \n", patched);
 
-      const end = performance.now();
-    //   console.log(`Total time taken: ${end - start} ms.`);
+  const end = performance.now();
+  //   console.log(`Total time taken: ${end - start} ms.`);
 
-      const tokensUsed = chatCompletion!.usage!.total_tokens;
-      console.log(`Tokens used: ${tokensUsed}`);
+  const tokensUsed = chatCompletion!.usage!.total_tokens;
+  console.log(`Tokens used: ${tokensUsed}`);
 
-      const costInDollars = (tokensUsed * 0.06) / 1000; // assuming $0.06 per token
-      console.log(`Cost in dollars: $${costInDollars.toFixed(2)}`);
+  const costInDollars = (tokensUsed * 0.06) / 1000; // assuming $0.06 per token
+  console.log(`Cost in dollars: $${costInDollars.toFixed(2)}`);
 }
 
 main();
