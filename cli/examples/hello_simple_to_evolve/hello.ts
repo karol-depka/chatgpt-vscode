@@ -9,6 +9,7 @@ const logStream = fs.createWriteStream('log.txt', {flags: 'a'});
 
 for(let i = 0; i < 3; i++) {
   console.log(purple, 'welcome') // purple
+  console.log(purple, 'welcome') // purple
   if(i % 2 == 0) console.log(red, 'hello earth') // red
     logStream.write('hello earth\n');
   if(i == 2) {
