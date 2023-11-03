@@ -7,15 +7,14 @@ import { extractCodeFromMarkdown } from "./utils/markdown_utils";
 
 dotenv.config();
 
-// console.log(process.env.OPENAI_API_KEY)
 console.log('initializing OpenAI')
 const openai = new OpenAI({
-  //   apiKey: "My API Key", // defaults to process.env["OPENAI_API_KEY"]
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 // const filePath = `examples/hello7/hello.ts`;
-const filePath = `examples/hello_simple/hello.ts`;
+// const filePath = `examples/hello_simple/hello.ts`;
+const filePath = `src/utils/apply_patch.ts`;
 const origFileContent = fs.readFileSync(filePath, "utf8");
 console.log(`original file content:${origFileContent}`);
 // const fileContent = `const startTime = Date.now();
@@ -44,10 +43,10 @@ File: ${filePath} :
 \`\`\`
 ${origFileContent}
 \`\`\`
-    put it in a loop to execute 7 times. print it using nice terminal colors - red and yellow. Without external libraries.
-    Add the end, add blue, bold "Goodnight!".
-    Wrap the whole code into a function and call it.
+    make logging using nice terminal colors - red and yellow and green and blue. Without external libraries.
+
     =====
+
     Print me the output as .patch file that can be automatically applied. The patch should contain proper indentation.
     Just print the file patches. No explanations, no pleasantries, no prelude.
     Before each file you output, provide full file path.`;
