@@ -14,6 +14,10 @@ const logStream = fs.createWriteStream('log.txt', {flags: 'a'});
 for(let r = 0; r < 256; r++){
   for(let g = 0; g < 256; g++){
     for(let b = 0; b < 256; b++){
+        console.log('\x1b[38;2;' + r + ';' + g + ';' + b + 'm%s\x1b[0m', 'RGB(' + r + ',' + g + ',' + b + ')');
+    }
+  }
+}
 
 for(let i = 0; i < 3; i++) {
   console.log(yellow, i); // yellow
@@ -32,7 +36,5 @@ for(let i = 0; i < 3; i++) {
   }
   console.log(reset + '') // reset color
 }
-    console.log('\x1b[38;2;' + r + ';' + g + ';' + b + 'm%s\x1b[0m', 'RGB(' + r + ',' + g + ',' + b + ')');
-    }
-  }
+
 // end
