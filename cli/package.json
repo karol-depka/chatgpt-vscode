@@ -1,0 +1,22 @@
+{
+  "name": "my-ts-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "prepublish": "yarn build"
+  },
+  "keywords": [],
+  "author": "karol",
+  "license": "other",
+  "dependencies": {
+    "@types/node": "^version",
+    "typescript": "^version",
+    "ts-node": "^version"
+  },
+  "bin": {
+    "my-cli": "./dist/index.js"
+  }
+}
