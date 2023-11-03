@@ -1,8 +1,9 @@
-export type FilePath =
+/** MP stands tentatively for MetaPrompting */
+export type MPFilePath =
     string & {type: 'FilePath',}
 export type PatchFilePathStr
   = string & { type: "PatchFilePathStr" };
-export type FileContent =
+export type MPFileContent =
     string & { type: "FileContent" };
 export type FileTypeStr = 
     string & { type: "FileType" };

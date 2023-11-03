@@ -1,7 +1,6 @@
-import { FileContent } from "openai/resources";
 import {
-  FileContent,
-  FilePath,
+  MPFileContent,
+  MPFilePath,
   FileTypeStr,
   MarkDownContentStr,
 } from "../types";
@@ -10,8 +9,8 @@ import { blue, reset } from "../colors";
 // import fs from "fs";
 
 export function makeCodeBlockForPrompt(
-  filePath: FilePath,
-  fileContent: FileContent
+  filePath: MPFilePath,
+  fileContent: MPFileContent
   //   fileType: FileTypeString
 ): MarkDownContentStr {
   const fileType = "typescript"; // skipping for now coz maybe this prevents diff output

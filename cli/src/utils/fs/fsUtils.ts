@@ -1,9 +1,9 @@
-import {FileContent, FilePath} from "../types";
+import {MPFileContent, MPFilePath} from "../types";
 import fs from "fs";
 
-export function readFileFromPath(inputFilePath: FilePath) {
+export function readFileFromPath(inputFilePath: MPFilePath) {
   return fs.readFileSync(
       inputFilePath,
       "utf8"
-  ) as FileContent;
+  ) as MPFileContent;
 }

@@ -15,7 +15,7 @@ import { yellow, reset, blue, green, red } from "./utils/colors";
 import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 import { showCosts } from "./utils/openai/pricingCalc";
 import { makeCodeBlockForPrompt } from "./utils/markdown/generateMarkdown";
-import { FilePath, FileContent, PatchContentStr } from "./utils/types";
+import { MPFilePath, MPFileContent, PatchContentStr } from "./utils/types";
 import {readFileFromPath} from "./utils/fs/fsUtils";
 import {makePrompt} from "./utils/prompting/makePrompt";
 import {FileToPatch} from "./utils/patching/types";
@@ -25,7 +25,7 @@ console.log(yellow + "Welcome to " + red + " MetaPrompting Technology" + reset);
 dotenv.config();
 const userPrompt = process.argv[3] as string // || userPrompt;
 
-const inputFilePath = process.argv[2] as FilePath;
+const inputFilePath = process.argv[2] as MPFilePath;
 
 console.log(blue + "inputFilePath: " + reset, inputFilePath);
 console.log(blue + "userPrompt: " + reset, userPrompt);
