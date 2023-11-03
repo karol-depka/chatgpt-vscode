@@ -64,6 +64,7 @@
         btn.textContent = "Copy Code";
 
         btn.addEventListener('click', function (e) {
+            window.alert('pressed button')
             e.preventDefault();
             vscode.postMessage({
                 type: 'codeSelected',
@@ -71,7 +72,19 @@
             });
         });
 
-        preCodeBlocks[i].parentNode.insertBefore(btn, preCodeBlocks[i]);        
+        preCodeBlocks[i].parentNode.insertBefore(btn, preCodeBlocks[i]);
+
+        // Create a "Diff" button next to the "Copy Code" button
+        var diffButton = document.createElement("button");
+        diffButton.textContent = "Diff";
+        diffButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            vscode.postMessage({
+                type: 'diffSelected',
+                value: preCodeBlocks[i].innerText
+            });
+        });
+        preCodeBlocks[i].parentNode.insertBefore(diffButton, preCodeBlocks[i].nextSibling);
     }
 
     var codeBlocks = document.querySelectorAll('code');
@@ -95,6 +108,18 @@
         codeBlocks[i].innerHTML = null;
         codeBlocks[i].appendChild(d);
         d.classList.add("code");
+
+        // Create a "Diff" button next to the "Copy Code" button
+        var diffButton = document.createElement("button");
+        diffButton.textContent = "Diff";
+        diffButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            vscode.postMessage({
+                type: 'diffSelected',
+                value: codeBlocks[i].innerText
+            });
+        });
+        codeBlocks[i].parentNode.insertBefore(diffButton, codeBlocks[i].nextSibling);
     }
 
     microlight.reset('code');
@@ -114,9 +139,11 @@
 
   document.getElementById('prompt-input').addEventListener('keyup', function (e) {
     if (e.keyCode === 13) {
+      const value = this.value;
+      console.log('prompt value: ', value)
       vscode.postMessage({
         type: 'prompt',
-        value: this.value
+        value: value
       });
     }
   });
