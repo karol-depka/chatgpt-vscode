@@ -129,7 +129,7 @@ const reset = "\x1b[0m";
     } else if (line.startsWith("+")) {
       console.log(`${green}${line}${reset}`);
     } else {
-      console.log(line);
+      console.log(`${blue}${line}${reset}`);
     }
   }
 }
