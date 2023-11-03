@@ -35,7 +35,7 @@ console.log(blue + `original file content:\n${origFileContent}` + "\x1b[0m");
 
 
 async function main() {
-  const promptText = `
+  const fullPromptTextToSend = `
 \`\`\`typescript
 ${origFileContent}
 \`\`\`
@@ -49,8 +49,9 @@ ${origFileContent}
     ==== Here I give you general output formatting guidelines - you must follow them!
     ${formattingGuidelines.join("\n\n")}
 `;
+  console.log(blue + "fullPromptTextToSend: \n" + reset, fullPromptTextToSend);
   const chatCompletion = await openai.chat.completions.create({
-    messages: [{ role: "user", content: promptText }],
+    messages: [{ role: "user", content: fullPromptTextToSend }],
     // model: "gpt-3.5-turbo",
     model: "gpt-4",
     temperature: 0,
