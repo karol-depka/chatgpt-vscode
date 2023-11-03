@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import { makePrompt } from "../prompting/makePrompt";
-import { FileToPatch } from "../patching/types";
 import { MPFullPrompt, MPUserPrompt, PatchContentStr } from "../types";
 import { MPPromptInputs } from "../prompting/types";
 import { green } from "../colors";
