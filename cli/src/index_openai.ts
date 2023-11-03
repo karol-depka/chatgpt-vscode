@@ -14,9 +14,9 @@ import {MPFilePath, MPFileContent, MPPatchContent, MPFullPrompt, MPUserPrompt} f
 import {readFileFromPath} from "./utils/fs/fsUtils";
 import {FileToPatch} from "./utils/patching/types";
 import { makeAndSendFullPrompt } from "./utils/openai/sendPrompt";
-// import chalk from 'chalk';
+import chalk from 'chalk';
 
-// console.log(chalk.inverse(chalk.blue('Hello world - chalk!')));
+console.log(chalk.inverse(chalk.blue('Hello world - chalk!')));
 
 console.log(yellow + "Welcome to " + red + " MetaPrompting Technology" + reset);
 

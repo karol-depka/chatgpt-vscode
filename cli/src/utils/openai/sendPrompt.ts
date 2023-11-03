@@ -3,15 +3,15 @@ import OpenAI from "openai";
 import { makePrompt } from "../prompting/makePrompt";
 import { MPFullPrompt, MPPatchContent } from "../types";
 import { MPPromptInputs } from "../prompting/types";
-// import chalk from 'chalk'
+import chalk from 'chalk'
 import { extractCodeFromMarkdown } from "../markdown/markdown_utils";
 import {main} from "./sendPromptStreaming";
 dotenv.config();
 const idFun = <T>(x: T) => x;
-const chalk = {
-  green: idFun,
-  inverse: idFun,
-}
+// const chalk = {
+//   green: idFun,
+//   inverse: idFun,
+// }
 
 export async function makeAndSendFullPrompt(promptInputs: MPPromptInputs) {
   const fullPromptTextToSend = makePrompt(promptInputs);
