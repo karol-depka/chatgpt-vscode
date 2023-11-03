@@ -8,7 +8,7 @@ describe('Patch tests', () => {
         expect(result).toBe('');
     });
 
-test("hello_simple - patch from openai", () => {
+test("hello_simple - patch from openai, but without whitespace", () => {
   const origContent = `// start
 console.log('hello world')
 console.debug('bye')
@@ -23,6 +23,30 @@ console.debug('bye')
  console.debug('bye')
  // end
 `;
+
+  const result = applyPatchToViaStrings(patchContent, origContent);
+  const expected = `// start
+console.log('hello Earth')
+console.debug('bye')
+// end
+`;
+  expect(result).toBe(expected);
+});
+
+test("hello_simple - patch from openai with whitespace", () => {
+  const origContent = `// start
+console.log('hello world')
+console.debug('bye')
+// end
+`;
+  const patchContent = `--- examples/hello_simple/hello.ts
++++ examples/hello_simple/hello.ts
+@@ -1,4 +1,4 @@
+ // start
+-console.log('hello world')
++console.log('hello Earth')
+ console.debug('bye')
+ // end`;
 
   const result = applyPatchToViaStrings(patchContent, origContent);
   const expected = `// start

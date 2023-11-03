@@ -58,7 +58,7 @@ ${origFileContent}
   console.debug(`chatCompletion.choices...`, responseContent);
   const responsePatch = extractCodeFromMarkdown(responseContent!);
   console.debug(`responsePatch:` + responsePatch);
-  const patched = applyPatchViaStrings(origFileContent, responsePatch);
+  const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patched: \n \n", patched);
 
   const end = performance.now();
