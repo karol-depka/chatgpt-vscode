@@ -3,7 +3,7 @@ const red = '\x1b[31m%s\x1b[0m';
 const blue = '\x1b[34m%s\x1b[0m';
 const bold = '\x1b[1m%s\x1b[0m';
 const reset = '\x1b[0m';
-const fs = require('fs');
+import fs from 'fs';
 const logStream = fs.createWriteStream('log.txt', {flags: 'a'});
 
 for(let i = 0; i < 3; i++) {
