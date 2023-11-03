@@ -18,11 +18,13 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullPrompt) {
     apiKey: process.env.OPENAI_API_KEY,
   });
 
+  console.log("sendFullPrompt:");
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: "user", content: fullPromptTextToSend }],
     // model: "gpt-3.5-turbo",
     model: "gpt-4",
-    temperature: 0,
+    // temperature: 0,
+    top_p: 0.1,
   });
 
   // console.debug(`chatCompletion.choices`, chatCompletion.choices);
