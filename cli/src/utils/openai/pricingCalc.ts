@@ -6,11 +6,13 @@ export function showCosts(chatCompletion: OpenAI.Chat.Completions.ChatCompletion
   const tokensUsed = chatCompletion!.usage!.total_tokens;
   const inputTokens = chatCompletion!.usage!.prompt_tokens;
   const outputTokens = tokensUsed - inputTokens;
+  const inputTokenPrice = 0.06;
+  const outputTokenPrice = 0.06;
 
   console.log(`Input tokens: ${inputTokens}`);
   console.log(`Output tokens: ${outputTokens}`);
-  const inputCost = (inputTokens * 0.06) / 1000;
-  const outputCost = (outputTokens * 0.06) / 1000;
+  const inputCost = (inputTokens * inputTokenPrice) / 1000;
+  const outputCost = (outputTokens * outputTokenPrice) / 1000;
   const totalCost = inputCost + outputCost;
 
   console.log(`Input cost: $${inputCost.toFixed(2)}`);
