@@ -44,7 +44,7 @@ ${origFileContent}
     =====
     ${customGuidelines.join("\n\n")}
 
-    ==== Output formatting guidelines:
+    ==== Here I give you general output formatting guidelines - you must follow them!
     ${formattingGuidelines.join("\n\n")}
 `;
   const chatCompletion = await openai.chat.completions.create({
