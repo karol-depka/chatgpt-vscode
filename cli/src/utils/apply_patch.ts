@@ -109,13 +109,27 @@ export function patchFile(filePath: string, patchPath: string): void {
     console.log(`Finished patching file. Output written to ${filePath}.applied.ts`);
 }
 
-// Example usage
-
-// patchFile('../../cli/src/index.ts', 'hello.patch');
-// patchFile('apply_patch.ts', 'hello.patch');
-
 export function applyPatchToViaStrings(patchContent: string, originalContent: string) {
     const patch = parsePatch(patchContent);
     const result = applyPatch(originalContent, patch);
     return result;
+}
+
+export function printColoredDiff(diffStr: string): void {
+const red = "\x1b[31m";
+const yellow = "\x1b[33m";
+const blue = "\x1b[34m";
+const green = "\x1b[32m";
+const reset = "\x1b[0m";
+
+  const lines = diffStr.split("\n");
+  for (let line of lines) {
+    if (line.startsWith("-")) {
+      console.log(`${red}${line}${reset}`);
+    } else if (line.startsWith("+")) {
+      console.log(`${green}${line}${reset}`);
+    } else {
+      console.log(line);
+    }
+  }
 }
