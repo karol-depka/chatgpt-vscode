@@ -1,0 +1,16 @@
+--- package.json
++++ package.json
+@@ -167,6 +167,13 @@
+           "type": "boolean",
+           "default": true,
+           "description": "Append language id of the selected code to the codeblock (```language...code...```)",
++          "order": 11
++        },
++        "chatgpt.xyz": {
++          "type": "string",
++          "default": "",
++          "description": "Description for the xyz configuration option",
++          "order": 12
+         }
+       }
+     },

@@ -1,0 +1,11 @@
+--- extension.ts
++++ extension.ts
+@@ -60,6 +61,8 @@
+ 		} else if (event.affectsConfiguration('chatgpt.timeoutLength')) {
+ 			provider.setSettings({ timeoutLength: config.get<number>('timeoutLength') || 60 });
+ 		}
++		else if (event.affectsConfiguration('chatgpt.xyz')) {
++			provider.setSettings({ xyz: config.get<string>('xyz') });
+ 		}
+ 	});
+ }

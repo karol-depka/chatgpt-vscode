@@ -1,0 +1,14 @@
+--- example.ts
++++ example.ts
+@@ -1,5 +1,6 @@
++console.log("hello");
+ for (let i = 0; i <= 100; i++) {
+     console.log(i);
+     if (i % 2 !== 0) {
+        console.log("hello");
+     }
+@@ -7,3 +8,4 @@
+     if (i % 6 === 0) {
+         console.log("welcome");
+     }
++console.log("goodbye");
