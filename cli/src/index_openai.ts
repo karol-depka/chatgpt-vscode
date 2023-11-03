@@ -4,6 +4,7 @@ import { performance } from "perf_hooks";
 import fs from "fs";
 import { applyPatchToViaStrings as applyPatchViaStrings, printColoredDiff } from "./utils/apply_patch";
 import { extractCodeFromMarkdown } from "./utils/markdown_utils";
+import { customGuidelines } from "./custom_guidelines";
 
 const red = "\x1b[31m";
 const yellow = "\x1b[33m";
@@ -11,7 +12,7 @@ const blue = "\x1b[34m";
 const green = "\x1b[32m";
 const reset = "\x1b[0m";
 
-console.log(yellow + "Welcome to MetaPrompting" + reset);
+console.log(yellow + "Welcome to MetaPrompting Technology" + reset);
 
 dotenv.config();
 
@@ -20,32 +21,14 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// const filePath = `examples/hello7/hello.ts`;
-const filePath = `examples/hello_simple/hello.ts`;
-// const filePath = `src/utils/apply_patch.ts`;
-// const filePath = `src/index_openai.ts`;
+const filePath = `src/index_openai.ts`;
 const origFileContent = fs.readFileSync(filePath, "utf8");
 console.log(blue + `original file content:${origFileContent}` + "\x1b[0m");
 
 async function main() {
-  //     print iteration numbers in the inner loop. Remove printing iteration number in the outer loop. Change divisibility from odd to div by 3.
+  
+  const userPrompt = `make it say hello Earth. Add nice terminal colors. Store color control sequences in const-s.`;
 
-  const userPrompt = `make it say hello Earth. Add nice terminal colors. Store color control sequences in const-s.`
-
-  //     put it in a loop to execute 7 times. On odd iterations, it should print "odd!" and then print "odd it is". Wrap the whole code into a function and call it.
-
-//   const userPrompt = `
-//     add a an exported function \`printColoredDiff(diffStr: string)\` which prints diff using terminal colors.
-//      Have the color&reset control sequences in const-s.
-//     Print original file contents in blue.
-//     Remember to switch color back to default. Without external libraries.
-// `;
-
-  const customGuidelines = [
-    `Use strictest TypeScript settings in the code you generate.`,
-    // `Generate unit tests`,
-    // `Use newest libraries, API-s and language settings and style.`
-  ];
 
   const promptText = `Given this file: 
 File: ${filePath} :
@@ -75,7 +58,7 @@ ${origFileContent}
   console.log(green + `responseContent:${responseContent}` + "\x1b[0m");
   const responsePatch = extractCodeFromMarkdown(responseContent!);
   // console.debug(`responsePatch:` + green + responsePatch + "\x1b[0m");
-  console.debug(`responsePatch:`)
+  console.debug(`responsePatch:`);
   printColoredDiff(responsePatch);
   const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patched: \n \n", patched);
@@ -86,6 +69,8 @@ ${origFileContent}
 
   const end = performance.now();
   //   console.log(`Total time taken: ${end - start} ms.`);
+
+  // https://openai.com/pricing
 
   const tokensUsed = chatCompletion!.usage!.total_tokens;
   console.log(`Tokens used: ${tokensUsed}`);
