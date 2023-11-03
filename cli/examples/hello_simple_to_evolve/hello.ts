@@ -11,10 +11,13 @@ const bold = '\x1b[1m%s\x1b[0m';
 const reset = '\x1b[0m';
 import fs from 'fs';
 const logStream = fs.createWriteStream('log.txt', {flags: 'a'});
+function printRGB(r: number, g: number, b: number) {
+  console.log("\x1b[38;2;" + r + ";" + g + ";" + b + "m%s\x1b[0m", "X");
+}
 for(let r = 0; r < 256; r++){
   for(let g = 0; g < 256; g++){
     for(let b = 0; b < 256; b++){
-        console.log('\x1b[38;2;' + r + ';' + g + ';' + b + 'm%s\x1b[0m', 'RGB(' + r + ',' + g + ',' + b + ')');
+        printRGB(r, g, b);
     }
   }
 }
