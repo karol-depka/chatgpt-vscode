@@ -10,16 +10,18 @@ import {
 import { extractCodeFromMarkdown } from "./utils/markdown/markdown_utils";
 import { customGuidelines } from "./utils/prompting/custom_guidelines";
 import { formattingGuidelines } from "./utils/prompting/formattingGuidelines";
-import { yellow, reset, blue, green } from "./utils/colors";
+import { yellow, reset, blue, green, red } from "./utils/colors";
 import { userPrompt } from "./utils/prompting/userPrompt";
 import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 import { showCosts } from "./utils/openai/pricingCalc";
+import { makeCodeBlockForPrompt } from "./utils/markdown/generateMarkdown";
+import { FilePathStr, FileContentStr } from "./utils/types";
 
-console.log(yellow + "Welcome to MetaPrompting Technology" + reset);
+console.log(yellow + "Welcome to " + red + " MetaPrompting Technology" + reset);
 
 dotenv.config();
 
-const inputFilePath = process.argv[2];
+const inputFilePath = process.argv[2] as FilePathStr;
 console.log(blue + "inputFilePath: " + reset, inputFilePath);
 console.log(blue + "userPrompt: " + reset, userPrompt);
 console.log("initializing OpenAI");
@@ -28,28 +30,23 @@ const openai = new OpenAI({
 });
 
 checkFileNotModifiedInGitOrThrow(inputFilePath);
-
-// const filePath = `src/index_openai.ts`;
-const origFileContent = fs.readFileSync(inputFilePath, "utf8");
-console.log(blue + `original file content:\n${origFileContent}` + "\x1b[0m");
-
+const origFileContent = fs.readFileSync(
+  inputFilePath,
+  "utf8"
+) as FileContentStr;
 
 async function main() {
   const fullPromptTextToSend = `
     Given the files listed below, perform those changes to the files:
     ${userPrompt}
-    
-    File: ${inputFilePath} :
-\`\`\`typescript
-${origFileContent}
-\`\`\`
+    ${makeCodeBlockForPrompt(inputFilePath, origFileContent)}
     =====
     ${customGuidelines.join("\n\n")}
 
     ==== Here I give you general output formatting guidelines - you must follow them!
     ${formattingGuidelines.join("\n\n")}
 `;
-  console.log(blue + "fullPromptTextToSend: \n" + reset, fullPromptTextToSend);
+  console.log(blue + "fullPromptTextToSend:\n" + reset, fullPromptTextToSend);
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: "user", content: fullPromptTextToSend }],
     // model: "gpt-3.5-turbo",
@@ -65,11 +62,17 @@ ${origFileContent}
   // console.debug(`responsePatch:` + green + responsePatch + "\x1b[0m");
   console.debug(`responsePatch:`);
   printColoredDiff(responsePatch);
-  const patchedFileContents = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
+  const patchedFileContents = applyPatchViaStrings(
+    responsePatch,
+    origFileContent
+  ); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patchedFileContents: \n \n", patchedFileContents);
 
   const patchedFilePath = inputFilePath; // inputFilePath.replace(".ts", ".patched.ts");
-  console.log("will write file (after checking git status) - patchedFilePath: ", patchedFilePath);
+  console.log(
+    "will write file (after checking git status) - patchedFilePath: ",
+    patchedFilePath
+  );
   checkFileNotModifiedInGitOrThrow(inputFilePath); // just before writing - check again git status
 
   fs.writeFileSync(patchedFilePath, patchedFileContents);
@@ -86,4 +89,3 @@ ${origFileContent}
 }
 
 main();
-
