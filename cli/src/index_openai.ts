@@ -33,16 +33,19 @@ console.log(`original file content:${origFileContent}`);
 // `
 
 async function main() {
-  //     print iteration numbers in the inner loop. Remove printing iteration number in the outer loop. Change divisibility from odd to div by 3.
+  //     print iteration numbers in the inner loop. Remove printing iteration number in the outer loop. Change divisibility from odd to div by 3. 
 
   //     make it say hello Earth
+
+  //     put it in a loop to execute 7 times. On odd iterations, it should print "odd!" and then print "odd it is". Wrap the whole code into a function and call it.
 
   const promptText = `Given this file: 
 File: ${filePath} :
 \`\`\`
 ${origFileContent}
 \`\`\`
-    put it in a loop to execute 7 times. On odd iterations, it should print "odd!" and then print "odd it is". Wrap the whole code into a function and call it.
+    put it in a loop to execute 7 times. print it using nice terminal colors - red and yellow.
+    Add the end, add blue, bold "Goodnight!"
     =====
     Print me the output as .patch file that can be automatically applied. The patch should contain proper indentation.
     Just print the file patches. No explanations, no pleasantries, no prelude.
@@ -62,7 +65,7 @@ ${origFileContent}
   const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patched: \n \n", patched);
 
-  const patchedFilePath = filePath.replace('.ts', '.patched.ts');
+  const patchedFilePath = filePath.replace(".ts", ".patched.ts");
   console.log("patchedFilePath", patchedFilePath);
   fs.writeFileSync(patchedFilePath, patched);
 
@@ -75,9 +78,9 @@ ${origFileContent}
   const costInDollars = (tokensUsed * 0.06) / 1000; // assuming $0.06 per token
   console.log(`Cost in dollars: $${costInDollars.toFixed(2)}`);
 
-  require('ts-node').register();
+  require("ts-node").register();
   console.log("===== Will execute", patchedFilePath);
-  require('../' + patchedFilePath);
+  require("../" + patchedFilePath);
   console.log("===== Finished executing", patchedFilePath);
 }
 

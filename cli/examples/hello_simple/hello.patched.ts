@@ -1,13 +1,8 @@
 // start
-function loopHello() {
-  for (let i = 0; i < 7; i++) {
-    console.log('hello world');
-    console.debug('bye');
-    if (i % 2 !== 0) {
-      console.log('odd!');
-      console.log('odd it is');
-    }
-  }
+for(let i = 0; i < 7; i++) {
+    console.log('\x1b[31m', 'hello world');
+    console.debug('\x1b[33m', 'bye');
 }
-loopHello();
+console.log('hello world')
+console.debug('bye')
 // end
