@@ -2,7 +2,7 @@ import {
   MPFileContent,
   MPFilePath,
   MPFileType,
-  MarkDownContentStr,
+  MPMarkDownContent,
 } from "../types";
 import { blue, reset } from "../colors";
 
@@ -12,7 +12,7 @@ export function makeCodeBlockForPrompt(
   filePath: MPFilePath,
   fileContent: MPFileContent
   //   fileType: FileTypeString
-): MarkDownContentStr {
+): MPMarkDownContent {
   const fileType = "typescript"; // skipping for now coz maybe this prevents diff output
   //   console.log(blue + `original file content:\n${fileContent}` + reset);
 
@@ -24,5 +24,5 @@ File at path: ${filePath} :
 \`\`\`
 ${fileContent}
 \`\`\`
-` as MarkDownContentStr;
+` as MPMarkDownContent;
 }

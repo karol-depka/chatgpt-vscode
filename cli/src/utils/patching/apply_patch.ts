@@ -1,8 +1,8 @@
 import * as fs from 'fs';
-import { MPFileContent, MPFilePath, MPPatchContent, PatchFilePathStr } from '../types';
+import { MPFileContent, MPFilePath, MPPatchContent, MPPatchFilePath } from '../types';
 import { blue, green, red, reset } from '../colors';
 import {checkFileNotModifiedInGitOrThrow} from "../git/gitUtils";
-import {readFileFromPath} from "../fs/fsUtils";
+import {coloredFilePath, readFileFromPath} from "../fs/fsUtils";
 
 interface Patch {
     header: string[];
@@ -101,9 +101,9 @@ export function applyPatch(original: MPFileContent, patch: Patch): string {
     return output.join('\n');
 }
 
-// Main function
-export function patchFile(filePath: MPFilePath, patchPath: PatchFilePathStr): void {
-  console.log(`Patching file ${filePath} with patch ${patchPath}...`);
+
+export function patchFile(filePath: MPFilePath, patchPath: MPPatchFilePath): void {
+  console.log(`Patching file ${coloredFilePath(filePath)} with patch file ${coloredFilePath(patchPath as string as MPFilePath)}...`);
   const originalContent = fs.readFileSync(filePath, "utf-8") as MPFileContent;
   const patchContent = fs.readFileSync(patchPath, "utf-8") as MPPatchContent;
 

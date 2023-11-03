@@ -1,21 +1,21 @@
 /** MP stands tentatively for MetaPrompting */
-export type MPFilePath =
-    string & {type: 'MPFilePath',}
-export type PatchFilePathStr
-  = string & { type: "PatchFilePathStr" };
-export type MPFileContent =
-    string & { type: "FileContent" };
+export type MPFilePath
+  = string & {type: 'MPFilePath',}
+export type MPPatchFilePath
+  = string & { type: "MPPatchFilePath" };
+export type MPFileContent
+  = string & { type: "MPFileContent" };
 export type MPFileType =
-    string & { type: "FileType" };
+    string & { type: "MPFileType" };
 export type MPPatchContent =
-    string & { type: "PatchStringContent" };
-export type MarkDownContentStr = 
-    string & { type: "MarkDownStringContent" };
+    string & { type: "MPPatchContent" };
+export type MPMarkDownContent =
+    string & { type: "MPMarkDownContent" };
 
 /** later this could involve stuff like images, etc., as part of the prompt */
 export type MPUserPrompt =
     string & { type: "MPUserPrompt" };
 
-export type MPFullPrompt =
-    string & { type: "MPFullPrompt" };
+export type MPFullLLMPrompt =
+    string & { type: "MPFullLLMPrompt" };
 

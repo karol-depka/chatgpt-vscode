@@ -22,7 +22,6 @@ import {MPFileContent} from "../types"; // replace with your actual module name
 
 describe('Patch tests', () => {
 
-
     test('Empty patch and original content', () => {
         const result = applyPatchToViaStrings(patch(''), '' as MPFileContent);
         expect(result).toBe('');

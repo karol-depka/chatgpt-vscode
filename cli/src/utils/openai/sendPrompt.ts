@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import { makePrompt } from "../prompting/makePrompt";
-import { MPFullPrompt, MPPatchContent } from "../types";
+import { MPFullLLMPrompt, MPPatchContent } from "../types";
 import { MPPromptInputs } from "../prompting/types";
 import chalk from 'chalk'
 import { extractCodeFromMarkdown } from "../markdown/markdown_utils";
@@ -19,7 +19,7 @@ export async function makeAndSendFullPrompt(promptInputs: MPPromptInputs) {
   return sendFullPrompt(fullPromptTextToSend);
 }
 
-export async function sendFullPrompt(fullPromptTextToSend: MPFullPrompt) {
+export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   console.log(chalk.green("initializing OpenAI"));
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,

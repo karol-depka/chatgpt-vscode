@@ -1,3 +1,9 @@
+import yargs from "yargs";
+const argv = yargs.option('dry-run', {
+  alias: 'd',
+  type: 'boolean',
+}).argv;
+
 // import axios from "axios";
 // import dotenv from "dotenv";
 
@@ -51,6 +57,10 @@
 // async function main() {
 //   const prompt =
 //     'Translate the following English text to French: "Hello, how are you?"';
+//   if (argv.dryRun) {
+//     console.log("Dry run, not sending request to OpenAI.");
+//     return;
+//   }
 //   const response = await sendPromptToOpenAI(prompt);
 
 //   if (response) {
