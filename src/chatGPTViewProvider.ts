@@ -107,6 +107,11 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
                 }
                 case 'prompt': {
                     this.search(data.value);
+                    break;
+                }
+                case 'applyAll': {
+                    vscode.window.showErrorMessage('applyAll');
+                    break;
                 }
             }
         });

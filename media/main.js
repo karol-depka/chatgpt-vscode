@@ -128,9 +128,10 @@
     var applyButton = document.createElement("button");
     applyButton.textContent = "Apply All";
     applyButton.addEventListener('click', function (e) {
+        console.log('Apply All button pressed');
         e.preventDefault();
         vscode.postMessage({
-            type: 'apply',
+            type: 'applyAll',
         });
     });
     // Append the "Apply All" button to the response element
