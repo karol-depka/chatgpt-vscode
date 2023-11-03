@@ -12,6 +12,7 @@ import { customGuidelines } from "./custom_guidelines";
 import { formattingGuidelines } from "./formattingGuidelines";
 import { yellow, reset, blue, green } from "./utils/colors";
 import { userPrompt } from "./userPrompt";
+import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 
 console.log(yellow + "Welcome to MetaPrompting Technology" + reset);
 
@@ -25,18 +26,12 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const gitStatus = execSync(
-  `git status --porcelain ${inputFilePath}`
-).toString();
-if (gitStatus.length > 0) {
-  throw new Error(
-    `The file ${inputFilePath} has uncommitted changes. Please commit or stash them before running this script.`
-  );
-}
+checkFileNotModifiedInGitOrThrow(filePath);
 
 // const filePath = `src/index_openai.ts`;
 const origFileContent = fs.readFileSync(inputFilePath, "utf8");
 console.log(blue + `original file content:\n${origFileContent}` + "\x1b[0m");
+
 
 async function main() {
 
@@ -70,7 +65,7 @@ ${origFileContent}
   const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patched: \n \n", patched);
 
-  const patchedFilePath = inputFilePath.replace(".ts", ".patched.ts");
+  const patchedFilePath = inputFilePath; // inputFilePath.replace(".ts", ".patched.ts");
   console.log("patchedFilePath", patchedFilePath);
   fs.writeFileSync(patchedFilePath, patched);
 
