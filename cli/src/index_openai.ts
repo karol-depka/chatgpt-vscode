@@ -1,8 +1,12 @@
 import OpenAI from "openai";
 import dotenv from "dotenv";
+import { execSync } from "child_process";
 import { performance } from "perf_hooks";
 import fs from "fs";
-import { applyPatchToViaStrings as applyPatchViaStrings, printColoredDiff } from "./utils/apply_patch";
+import {
+  applyPatchToViaStrings as applyPatchViaStrings,
+  printColoredDiff,
+} from "./utils/apply_patch";
 import { extractCodeFromMarkdown } from "./utils/markdown_utils";
 import { customGuidelines } from "./custom_guidelines";
 
@@ -17,26 +21,36 @@ console.log(yellow + "Welcome to MetaPrompting Technology" + reset);
 dotenv.config();
 
 const inputFilePath = process.argv[2];
-console.log(blue+"inputFilePath: " +reset, inputFilePath);
+console.log(blue + "inputFilePath: " + reset, inputFilePath);
 console.log("initializing OpenAI");
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const gitStatus = execSync(
+  `git status --porcelain ${inputFilePath}`
+).toString();
+if (gitStatus.length > 0) {
+  throw new Error(
+    `The file ${inputFilePath} has uncommitted changes. Please commit or stash them before running this script.`
+  );
+}
 
 // const filePath = `src/index_openai.ts`;
 const origFileContent = fs.readFileSync(inputFilePath, "utf8");
 console.log(blue + `original file content:${origFileContent}` + "\x1b[0m");
 
 async function main() {
-  
-  const userPrompt = `add logging to file log.log`;
+  // const userPrompt = `add logging to file called log.log. Use a library like winston. Make sure logs are appended, not overwritten. Make sure output still goes to the console.`;
+  const userPrompt = `Check if inputFilePath file has uncommitted changes in git status. Throw exception if so.`;
 
   // could run various combinations on those, automatically
   const formattingGuidelines = [
     `Modify minimum number of lines.`,
+    `Do not make unrelated changes to the file`,
     `Ensure that the patch is valid`,
     // `Ensure that if you want to modify a line, it is prefixed`. // Could prefix with star or something. Could fuzzy-apply lines not matching context, as changed lines - it's what GPT4 does sometimes
-  ]
+  ];
 
   const promptText = `Given this file:
 File: ${inputFilePath} :
