@@ -44,7 +44,7 @@ File: ${filePath} :
 \`\`\`
 ${origFileContent}
 \`\`\`
-    put it in a loop to execute 7 times. print it using nice terminal colors - red and yellow.
+    put it in a loop to execute 7 times. print it using nice terminal colors - red and yellow. Without external libraries.
     Add the end, add blue, bold "Goodnight!"
     =====
     Print me the output as .patch file that can be automatically applied. The patch should contain proper indentation.
