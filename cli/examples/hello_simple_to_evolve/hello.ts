@@ -8,9 +8,9 @@ for(let i = 0; i < 3; i++) {
   if(i % 2 == 0) console.log(red, 'hello earth') // red
   if(i == 2) {
     console.debug('bye')
-    console.log(blue, bold, 'goodbye\x1b[0m') // blue, bold
-    console.log(blue, bold, 'goodbye\x1b[0m') // blue, bold
+    console.log(blue + bold + 'goodbye\x1b[0m') // blue, bold
+    console.log(blue + bold + 'goodbye\x1b[0m') // blue, bold
   }
-console.log(reset) // reset color
+  console.log(reset + '') // reset color
 }
 // end
