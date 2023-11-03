@@ -26,7 +26,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-checkFileNotModifiedInGitOrThrow(filePath);
+checkFileNotModifiedInGitOrThrow(inputFilePath);
 
 // const filePath = `src/index_openai.ts`;
 const origFileContent = fs.readFileSync(inputFilePath, "utf8");
