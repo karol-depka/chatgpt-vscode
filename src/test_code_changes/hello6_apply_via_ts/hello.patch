@@ -1,7 +1,8 @@
 --- hello.ts
 +++ hello.ts
-@@ -1,11 +1,11 @@
- const startTime = Date.now();
+@@ -1,10 +1,13 @@
++function myFunction() {
++const startTime = Date.now();
  
 -for (let i = 1; i <= 99; i++) {
 +for (let i = 1; i <= 3; i++) {
@@ -12,7 +13,8 @@
          }
      }
  }
- 
 -console.log(`Total time taken: ${Date.now() - startTime}ms`);
-+console.log(`Total time taken: ${(Date.now() - startTime) / 1000}s`);
-+console.log("goodbye");
++console.log(`Total time taken: ${(Date.now() - startTime) * 1000000}ns`);
++}
++
++myFunction();

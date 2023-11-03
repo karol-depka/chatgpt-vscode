@@ -12,4 +12,6 @@ echo
 
 ts-node apply_patch.ts
 
-ts-node hello.ts.applied.ts
+ts-node hello.orig.ts.applied.ts
+
+# prettier --write hello.orig.ts.applied.ts

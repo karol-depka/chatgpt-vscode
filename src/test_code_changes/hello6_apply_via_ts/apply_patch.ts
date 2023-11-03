@@ -100,4 +100,4 @@ function patchFile(filePath: string, patchPath: string): void {
 
 // Example usage
 
-patchFile('hello.ts', 'hello.patch');
+patchFile('hello.orig.ts', 'hello.patch');
