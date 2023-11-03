@@ -10,6 +10,4 @@ function loopHello() {
   }
 }
 loopHello();
-console.log('hello world')
-console.debug('bye')
 // end

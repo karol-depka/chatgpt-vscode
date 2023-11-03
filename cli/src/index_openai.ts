@@ -76,7 +76,9 @@ ${origFileContent}
   console.log(`Cost in dollars: $${costInDollars.toFixed(2)}`);
 
   require('ts-node').register();
+  console.log("===== Will execute", patchedFilePath);
   require('../' + patchedFilePath);
+  console.log("===== Finished executing", patchedFilePath);
 }
 
 main();
