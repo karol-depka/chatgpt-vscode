@@ -42,7 +42,7 @@ File: ${filePath} :
 \`\`\`
 ${origFileContent}
 \`\`\`
-    put it in a loop to execute 7 times. On odd iterations, it should print "odd!" and then print "odd it is".
+    put it in a loop to execute 7 times. On odd iterations, it should print "odd!" and then print "odd it is". Wrap the whole code into a function and call it.
     =====
     Print me the output as .patch file that can be automatically applied. The patch should contain proper indentation.
     Just print the file patches. No explanations, no pleasantries, no prelude.
@@ -62,6 +62,10 @@ ${origFileContent}
   const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patched: \n \n", patched);
 
+  const patchedFilePath = filePath.replace('.ts', '.patched.ts');
+  console.log("patchedFilePath", patchedFilePath);
+  fs.writeFileSync(patchedFilePath, patched);
+
   const end = performance.now();
   //   console.log(`Total time taken: ${end - start} ms.`);
 
@@ -70,6 +74,9 @@ ${origFileContent}
 
   const costInDollars = (tokensUsed * 0.06) / 1000; // assuming $0.06 per token
   console.log(`Cost in dollars: $${costInDollars.toFixed(2)}`);
+
+  require('ts-node').register();
+  require('../' + patchedFilePath);
 }
 
 main();
