@@ -12,6 +12,7 @@ for(let i = 0; i < 3; i++) {
   console.log(yellow, i); // yellow
   console.log(purple, 'welcome') // purple
   console.log(purple, 'welcome') // purple
+  console.log('\x1b[33m%s\x1b[0m', 'HELLO ALVARO and PARKER'); // orange
   if(i % 2 != 0) console.log(purple, 'this is odd!') // violet
   if(i % 2 == 0) console.log(red, 'hello earth') // red
     logStream.write('hello earth\n');
