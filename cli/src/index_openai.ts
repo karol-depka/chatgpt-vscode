@@ -35,12 +35,14 @@ console.log(blue + `original file content:\n${origFileContent}` + "\x1b[0m");
 
 
 async function main() {
-  const promptText = `Given this file:
-File: ${inputFilePath} :
+  const promptText = `
 \`\`\`typescript
 ${origFileContent}
 \`\`\`
+    Given the files listed below, do this:
     ${userPrompt}
+    
+    File: ${inputFilePath} :
     =====
     ${customGuidelines.join("\n\n")}
 
