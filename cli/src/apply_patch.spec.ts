@@ -1,4 +1,4 @@
-import { applyPatch, applyPatchToViaStrings } from './apply_patch'; // replace with your actual module name
+import { applyPatch, applyPatchToViaStrings } from './utils/apply_patch'; // replace with your actual module name
 
 describe('Patch tests', () => {
     test('Empty patch and original content', () => {
