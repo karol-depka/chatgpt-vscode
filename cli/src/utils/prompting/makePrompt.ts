@@ -3,9 +3,10 @@ import {makeCodeBlockForPrompt} from "../markdown/generateMarkdown";
 import {customGuidelines} from "./custom_guidelines";
 import {formattingGuidelines} from "./formattingGuidelines";
 import {FileToPatch} from "../patching/types";
+import {MPFullPrompt, MPUserPrompt} from "../types";
 
 /* Note: this makes GPT4 assumptions, like guidelines, markdown; will see how other LLM-s communicate */
-export function makePrompt(userPrompt: string, filesToPatch: FileToPatch[]): string {
+export function makePrompt(userPrompt: MPUserPrompt, filesToPatch: FileToPatch[]): MPFullPrompt {
     const titledFileCodeBlocks = filesToPatch.map(
         f => makeCodeBlockForPrompt(f.filePath, f.baseContent)
     )
@@ -21,5 +22,5 @@ ${customGuidelines.join("\n")}
 ${formattingGuidelines.join("\n")}
 `;
     console.log(blue + "fullPromptTextToSend:\n" + reset, fullPromptTextToSend);
-    return fullPromptTextToSend;
+    return fullPromptTextToSend as MPFullPrompt;
 }

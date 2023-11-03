@@ -15,7 +15,7 @@ import { yellow, reset, blue, green, red } from "./utils/colors";
 import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 import { showCosts } from "./utils/openai/pricingCalc";
 import { makeCodeBlockForPrompt } from "./utils/markdown/generateMarkdown";
-import { MPFilePath, MPFileContent, PatchContentStr } from "./utils/types";
+import {MPFilePath, MPFileContent, PatchContentStr, MPFullPrompt, MPUserPrompt} from "./utils/types";
 import {readFileFromPath} from "./utils/fs/fsUtils";
 import {makePrompt} from "./utils/prompting/makePrompt";
 import {FileToPatch} from "./utils/patching/types";
@@ -23,7 +23,7 @@ import {FileToPatch} from "./utils/patching/types";
 console.log(yellow + "Welcome to " + red + " MetaPrompting Technology" + reset);
 
 dotenv.config();
-const userPrompt = process.argv[3] as string // || userPrompt;
+const userPrompt = process.argv[3] as MPUserPrompt // || userPrompt;
 
 const inputFilePath = process.argv[2] as MPFilePath;
 
@@ -47,11 +47,14 @@ const filesToPatch: FileToPatch[] = [
   }
 ]
 
-
-async function main() {
+export function makeAndSendFullPrompt() {
   const fullPromptTextToSend = makePrompt(userPrompt, filesToPatch);
+  return sendFullPrompt(fullPromptTextToSend)
+}
+
+async function sendFullPrompt(fullPromptTextToSend: MPFullPrompt) {
   const chatCompletion = await openai.chat.completions.create({
-    messages: [{ role: "user", content: fullPromptTextToSend }],
+    messages: [{role: "user", content: fullPromptTextToSend}],
     // model: "gpt-3.5-turbo",
     model: "gpt-4",
     temperature: 0,
@@ -62,8 +65,13 @@ async function main() {
   // console.debug(`chatCompletion.choices...`, responseContent);
   console.log(green + `responseContent:${responseContent}` + "\x1b[0m");
   const responsePatch = extractCodeFromMarkdown(
-    responseContent!
+      responseContent!
   ) as PatchContentStr;
+  return {chatCompletion, responsePatch};
+}
+
+async function main() {
+  const { chatCompletion, responsePatch } = await makeAndSendFullPrompt();
   // console.debug(`responsePatch:` + green + responsePatch + "\x1b[0m");
   console.debug(`responsePatch:`);
   printColoredDiff(responsePatch);
