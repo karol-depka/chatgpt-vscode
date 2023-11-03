@@ -4,15 +4,16 @@ import {customGuidelines} from "./custom_guidelines";
 import {formattingGuidelines} from "./formattingGuidelines";
 import {FileToPatch} from "../patching/types";
 import {MPFullPrompt, MPUserPrompt} from "../types";
+import { PromptInputs } from "./types";
 
 /* Note: this makes GPT4 assumptions, like guidelines, markdown; will see how other LLM-s communicate */
-export function makePrompt(userPrompt: MPUserPrompt, filesToPatch: FileToPatch[]): MPFullPrompt {
-    const titledFileCodeBlocks = filesToPatch.map(
-        f => makeCodeBlockForPrompt(f.filePath, f.baseContent)
-    )
+export function makePrompt(promptInputs: MPPromptInputs): MPFullPrompt {
+    const titledFileCodeBlocks = promptInputs.filesToPatch.map((f) =>
+      makeCodeBlockForPrompt(f.filePath, f.baseContent)
+    );
     const fullPromptTextToSend = `
 Given the files listed below, perform those changes to the files:
-${userPrompt}
+${promptInputs.userPrompt}
 Here are the files to patch:
 ${titledFileCodeBlocks.join("\n\n")}
 =====

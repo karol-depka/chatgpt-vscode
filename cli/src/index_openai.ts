@@ -19,6 +19,7 @@ import {MPFilePath, MPFileContent, PatchContentStr, MPFullPrompt, MPUserPrompt} 
 import {readFileFromPath} from "./utils/fs/fsUtils";
 import {makePrompt} from "./utils/prompting/makePrompt";
 import {FileToPatch} from "./utils/patching/types";
+import { makeAndSendFullPrompt } from "./utils/openai/sendPrompt";
 
 console.log(yellow + "Welcome to " + red + " MetaPrompting Technology" + reset);
 
@@ -29,10 +30,6 @@ const inputFilePath = process.argv[2] as MPFilePath;
 
 console.log(blue + "inputFilePath: " + reset, inputFilePath);
 console.log(blue + "userPrompt: " + reset, userPrompt);
-console.log("initializing OpenAI");
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 checkFileNotModifiedInGitOrThrow(inputFilePath);
 
@@ -47,31 +44,13 @@ const filesToPatch: FileToPatch[] = [
   }
 ]
 
-export function makeAndSendFullPrompt() {
-  const fullPromptTextToSend = makePrompt(userPrompt, filesToPatch);
-  return sendFullPrompt(fullPromptTextToSend)
-}
 
-async function sendFullPrompt(fullPromptTextToSend: MPFullPrompt) {
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [{role: "user", content: fullPromptTextToSend}],
-    // model: "gpt-3.5-turbo",
-    model: "gpt-4",
-    temperature: 0,
-  });
-
-  // console.debug(`chatCompletion.choices`, chatCompletion.choices);
-  const responseContent = chatCompletion.choices[0].message.content;
-  // console.debug(`chatCompletion.choices...`, responseContent);
-  console.log(green + `responseContent:${responseContent}` + "\x1b[0m");
-  const responsePatch = extractCodeFromMarkdown(
-      responseContent!
-  ) as PatchContentStr;
-  return {chatCompletion, responsePatch};
-}
 
 async function main() {
-  const { chatCompletion, responsePatch } = await makeAndSendFullPrompt();
+  const { chatCompletion, responsePatch } = await makeAndSendFullPrompt({
+    userPrompt,
+    filesToPatch,
+  });
   // console.debug(`responsePatch:` + green + responsePatch + "\x1b[0m");
   console.debug(`responsePatch:`);
   printColoredDiff(responsePatch);
