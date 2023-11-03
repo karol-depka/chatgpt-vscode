@@ -5,9 +5,9 @@ export type PatchFilePathStr
   = string & { type: "PatchFilePathStr" };
 export type MPFileContent =
     string & { type: "FileContent" };
-export type FileTypeStr = 
+export type MPFileType =
     string & { type: "FileType" };
-export type PatchContentStr = 
+export type MPPatchContent =
     string & { type: "PatchStringContent" };
 export type MarkDownContentStr = 
     string & { type: "MarkDownStringContent" };

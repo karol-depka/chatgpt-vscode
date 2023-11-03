@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { MPFileContent, MPFilePath, PatchContentStr, PatchFilePathStr } from '../types';
+import { MPFileContent, MPFilePath, MPPatchContent, PatchFilePathStr } from '../types';
 import { blue, green, red, reset } from '../colors';
 import {checkFileNotModifiedInGitOrThrow} from "../git/gitUtils";
 import {readFileFromPath} from "../fs/fsUtils";
@@ -105,7 +105,7 @@ export function applyPatch(original: MPFileContent, patch: Patch): string {
 export function patchFile(filePath: MPFilePath, patchPath: PatchFilePathStr): void {
   console.log(`Patching file ${filePath} with patch ${patchPath}...`);
   const originalContent = fs.readFileSync(filePath, "utf-8") as MPFileContent;
-  const patchContent = fs.readFileSync(patchPath, "utf-8") as PatchContentStr;
+  const patchContent = fs.readFileSync(patchPath, "utf-8") as MPPatchContent;
 
   const result = applyPatchToViaStrings(patchContent, originalContent);
 
@@ -116,7 +116,7 @@ export function patchFile(filePath: MPFilePath, patchPath: PatchFilePathStr): vo
 }
 
 export function applyPatchToViaStrings(
-    patchContent: PatchContentStr, 
+    patchContent: MPPatchContent,
     originalContent: MPFileContent)
 {
     const patch = parsePatch(patchContent);
@@ -124,7 +124,7 @@ export function applyPatchToViaStrings(
     return result;
 }
 
-export function printColoredDiff(diffStr: PatchContentStr): void {
+export function printColoredDiff(diffStr: MPPatchContent): void {
 
   const lines = diffStr.split("\n");
   for (let line of lines) {
@@ -153,7 +153,7 @@ function checkFileContentIsSameOrThrow(filePath: MPFilePath, baseContent: MPFile
 export function patchFileIfSafeOrThrow(
     pathOfFileToPatch: MPFilePath,
     baseContent: MPFileContent,
-    patch: PatchContentStr) 
+    patch: MPPatchContent)
 {
   checkFileNotModifiedInGitOrThrow(pathOfFileToPatch); // just before writing - check again git status
   checkFileContentIsSameOrThrow(pathOfFileToPatch, baseContent);

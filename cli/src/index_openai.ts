@@ -10,7 +10,7 @@ import { yellow, reset, blue, green, red } from "./utils/colors";
 import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 import { showCosts } from "./utils/openai/pricingCalc";
 import { makeCodeBlockForPrompt } from "./utils/markdown/generateMarkdown";
-import {MPFilePath, MPFileContent, PatchContentStr, MPFullPrompt, MPUserPrompt} from "./utils/types";
+import {MPFilePath, MPFileContent, MPPatchContent, MPFullPrompt, MPUserPrompt} from "./utils/types";
 import {readFileFromPath} from "./utils/fs/fsUtils";
 import {FileToPatch} from "./utils/patching/types";
 import { makeAndSendFullPrompt } from "./utils/openai/sendPrompt";

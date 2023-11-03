@@ -1,5 +1,5 @@
-import {PatchContentStr} from "../types";
+import {MPPatchContent} from "../types";
 
 export function patch(str: string) {
-    return str as PatchContentStr
+    return str as MPPatchContent
 }

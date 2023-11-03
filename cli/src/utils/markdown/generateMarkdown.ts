@@ -1,7 +1,7 @@
 import {
   MPFileContent,
   MPFilePath,
-  FileTypeStr,
+  MPFileType,
   MarkDownContentStr,
 } from "../types";
 import { blue, reset } from "../colors";

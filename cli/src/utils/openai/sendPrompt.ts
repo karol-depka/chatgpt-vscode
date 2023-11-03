@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import { makePrompt } from "../prompting/makePrompt";
-import { MPFullPrompt, MPUserPrompt, PatchContentStr } from "../types";
+import { MPFullPrompt, MPUserPrompt, MPPatchContent } from "../types";
 import { MPPromptInputs } from "../prompting/types";
 import { green } from "../colors";
 import { extractCodeFromMarkdown } from "../markdown/markdown_utils";
@@ -31,6 +31,6 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullPrompt) {
   console.log(green + `responseContent:${responseContent}` + "\x1b[0m");
   const responsePatch = extractCodeFromMarkdown(
     responseContent!
-  ) as PatchContentStr;
+  ) as MPPatchContent;
   return { chatCompletion, responsePatch };
 }
