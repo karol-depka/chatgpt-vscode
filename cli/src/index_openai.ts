@@ -11,6 +11,7 @@ import { extractCodeFromMarkdown } from "./utils/markdown_utils";
 import { customGuidelines } from "./custom_guidelines";
 import { formattingGuidelines } from "./formattingGuidelines";
 import { yellow, reset, blue, green } from "./utils/colors";
+import { userPrompt } from "./userPrompt";
 
 console.log(yellow + "Welcome to MetaPrompting Technology" + reset);
 
@@ -18,6 +19,7 @@ dotenv.config();
 
 const inputFilePath = process.argv[2];
 console.log(blue + "inputFilePath: " + reset, inputFilePath);
+console.log(blue + "userPrompt: " + reset, userPrompt);
 console.log("initializing OpenAI");
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -37,8 +39,6 @@ const origFileContent = fs.readFileSync(inputFilePath, "utf8");
 console.log(blue + `original file content:${origFileContent}` + "\x1b[0m");
 
 async function main() {
-  // const userPrompt = `add logging to file called log.log. Use a library like winston. Make sure logs are appended, not overwritten. Make sure output still goes to the console.`;
-  const userPrompt = `Check if inputFilePath file has uncommitted changes in git status. Throw exception if so.`;
 
 
   const promptText = `Given this file:
