@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import { makePrompt } from "../prompting/makePrompt";
-import { green, reset } from "chalk";
 import { MPFullPrompt, MPUserPrompt, MPPatchContent } from "../types";
 import { MPPromptInputs } from "../prompting/types";
 import chalk from 'chalk'
