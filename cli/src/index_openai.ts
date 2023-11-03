@@ -15,7 +15,7 @@ import { userPrompt } from "./utils/prompting/userPrompt";
 import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 import { showCosts } from "./utils/openai/pricingCalc";
 import { makeCodeBlockForPrompt } from "./utils/markdown/generateMarkdown";
-import { FilePathStr, FileContentStr } from "./utils/types";
+import { FilePathStr, FileContentStr, PatchContentStr } from "./utils/types";
 
 console.log(yellow + "Welcome to " + red + " MetaPrompting Technology" + reset);
 
@@ -58,7 +58,7 @@ async function main() {
   const responseContent = chatCompletion.choices[0].message.content;
   // console.debug(`chatCompletion.choices...`, responseContent);
   console.log(green + `responseContent:${responseContent}` + "\x1b[0m");
-  const responsePatch = extractCodeFromMarkdown(responseContent!);
+  const responsePatch = extractCodeFromMarkdown(responseContent!) as PatchContentStr;
   // console.debug(`responsePatch:` + green + responsePatch + "\x1b[0m");
   console.debug(`responsePatch:`);
   printColoredDiff(responsePatch);
@@ -66,7 +66,7 @@ async function main() {
     responsePatch,
     origFileContent
   ); /// WARNING: PATCH IS FIRST ARG, then ORIG content
-  console.info("patchedFileContents: \n \n", patchedFileContents);
+  // console.info("patchedFileContents: \n \n", patchedFileContents);
 
   const patchedFilePath = inputFilePath; // inputFilePath.replace(".ts", ".patched.ts");
   console.log(

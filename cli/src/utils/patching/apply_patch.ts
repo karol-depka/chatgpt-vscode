@@ -1,4 +1,6 @@
 import * as fs from 'fs';
+import { FileContentStr, FilePathStr, PatchContentStr, PatchFilePathStr } from '../types';
+import { blue, green, red, reset } from '../colors';
 
 interface Patch {
     header: string[];
@@ -38,7 +40,7 @@ function parsePatch(content: string): Patch {
     return patch;
 }
 
-export function applyPatch(original: string, patch: Patch): string {
+export function applyPatch(original: FileContentStr, patch: Patch): string {
     console.log('Applying patch...');
     const originalLines = original.split('\n');
     let output: string[] = [];
@@ -98,29 +100,29 @@ export function applyPatch(original: string, patch: Patch): string {
 }
 
 // Main function
-export function patchFile(filePath: string, patchPath: string): void {
-    console.log(`Patching file ${filePath} with patch ${patchPath}...`);
-    const originalContent = fs.readFileSync(filePath, 'utf-8');
-    const patchContent = fs.readFileSync(patchPath, 'utf-8');
+export function patchFile(filePath: FilePathStr, patchPath: PatchFilePathStr): void {
+  console.log(`Patching file ${filePath} with patch ${patchPath}...`);
+  const originalContent = fs.readFileSync(filePath, "utf-8") as FileContentStr;
+  const patchContent = fs.readFileSync(patchPath, "utf-8") as PatchContentStr;
 
-    const result = applyPatchToViaStrings(patchContent, originalContent);
+  const result = applyPatchToViaStrings(patchContent, originalContent);
 
-    fs.writeFileSync(filePath + ".applied.ts", result);
-    console.log(`Finished patching file. Output written to ${filePath}.applied.ts`);
+  fs.writeFileSync(filePath + ".applied.ts", result);
+  console.log(
+    `Finished patching file. Output written to ${filePath}.applied.ts`
+  );
 }
 
-export function applyPatchToViaStrings(patchContent: string, originalContent: string) {
+export function applyPatchToViaStrings(
+    patchContent: PatchContentStr, 
+    originalContent: FileContentStr) 
+{
     const patch = parsePatch(patchContent);
     const result = applyPatch(originalContent, patch);
     return result;
 }
 
-export function printColoredDiff(diffStr: string): void {
-const red = "\x1b[31m";
-const yellow = "\x1b[33m";
-const blue = "\x1b[34m";
-const green = "\x1b[32m";
-const reset = "\x1b[0m";
+export function printColoredDiff(diffStr: PatchContentStr): void {
 
   const lines = diffStr.split("\n");
   for (let line of lines) {
