@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import {ChatGPTAPI} from "chatgpt";
 import {AuthInfo, Settings} from "./types";
+import { getGitDirectories, isWorkingDirectoryClean } from './utils/git_utils';
 
 export const BASE_URL = 'https://api.openai.com/v1';
 
@@ -91,7 +92,8 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
         webviewView.webview.html = html;
     
         // add an event listener for messages received by the webview
-        webviewView.webview.onDidReceiveMessage(data => {
+        webviewView.webview.onDidReceiveMessage(async data => {
+            console.log('onDidReceiveMessage', data)
             switch (data.type) {
                 case 'codeSelected': {
                     // do nothing if the pasteOnClick option is disabled
@@ -110,8 +112,51 @@ export class ChatGPTViewProvider implements vscode.WebviewViewProvider {
                     break;
                 }
                 case 'applyAll': {
-                    vscode.window.showErrorMessage('applyAll');
-                    break;
+                    console.log('applyAll message handler')
+                    getGitDirectories().then(async (folderPaths) => {
+                        for ( let folderPath of folderPaths ) {
+                            // const folderPath = folder.uri.fsPath;
+                            console.log('folderPath', folderPath);
+                            let isClean = await isWorkingDirectoryClean(folderPath);
+                            if (isClean) {
+                                vscode.window.showInformationMessage('The working directory is clean!');
+                            } else {
+                                vscode.window.showWarningMessage(folderPath + ' has uncommitted changes');
+                            }
+                            console.log('folderPath', folderPath);
+                            }
+                    });
+
+                    // })
+
+                    // if (vscode.workspace.workspaceFolders) {
+                    //     vscode.workspace.workspaceFolders.forEach(async folder => {
+                    // } else {
+                    //     console.log('No folders are open.');
+                    // }
+                
+                    // vscode.window.showInformationMessage('applyAll');
+                    // const git = vscode.extensions.getExtension('vscode.git')?.exports.getAPI(1);
+                    // if (!git) {
+                    //     vscode.window.showErrorMessage('Git extension not found');
+                    //     return;
+                    // }
+                    // const repo = git.repositories[0];
+                    // if (!repo) {
+                    //     vscode.window.showErrorMessage('No repository found');
+                    //     return;
+                    // }
+                    // const status = await repo.getStatus();
+                    // if (status.length > 0) {
+                    //     vscode.window.showErrorMessage('Working copy is not clean');
+                    //     return;
+                    // }
+                    // await vscode.commands.executeCommand('workbench.action.files.saveAll');
+                    // await vscode.commands.executeCommand('workbench.action.files.revert');
+                    // await vscode.commands.executeCommand('workbench.action.files.saveAll');
+                    // vscode.window.showInformationMessage('All changes applied successfully');
+        
+                    // break;
                 }
             }
         });

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { BASE_URL, ChatGPTViewProvider } from "./chatGPTViewProvider";
+import { exec } from 'child_process';
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('activating extension "chatgpt"');
@@ -57,7 +58,9 @@ function registerCommands(context: vscode.ExtensionContext, provider: ChatGPTVie
 		vscode.commands.registerCommand('chatgpt.optimize', () => commandHandler('promptPrefix.optimize')),
 		vscode.commands.registerCommand('chatgpt.findProblems', () => commandHandler('promptPrefix.findProblems')),
 		vscode.commands.registerCommand('chatgpt.documentation', () => commandHandler('promptPrefix.documentation')),
-		vscode.commands.registerCommand('chatgpt.resetConversation', () => provider.resetConversation())
+		vscode.commands.registerCommand('chatgpt.resetConversation', () => provider.resetConversation()),
+		// vscode.commands.registerCommand('chatgpt.applyAll', async () => {
+		// })
 	);
 }
 
