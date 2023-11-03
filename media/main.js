@@ -124,23 +124,23 @@
 
     microlight.reset('code');
 
-    // Create an "Apply" button after the response is set
+    // Create an "Apply All" button after the response is set
     var applyButton = document.createElement("button");
-    applyButton.textContent = "Apply";
+    applyButton.textContent = "Apply All";
     applyButton.addEventListener('click', function (e) {
         e.preventDefault();
         vscode.postMessage({
             type: 'apply',
         });
     });
-    // Append the "Apply" button to the response element
+    // Append the "Apply All" button to the response element
     document.getElementById("response").appendChild(applyButton);
   }
 
   document.getElementById('prompt-input').addEventListener('keyup', function (e) {
     if (e.keyCode === 13) {
       const value = this.value;
-      console.log('prompt value: ', value)
+      console.log('prompt value from prompt-input: ', value)
       vscode.postMessage({
         type: 'prompt',
         value: value
