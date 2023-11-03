@@ -70,7 +70,7 @@ ${origFileContent}
   const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patched: \n \n", patched);
 
-  const patchedFilePath = inputFilePath.replace(".ts", ".patched.ts");
+  const patchedFilePath = inputFilePath; // inputFilePath.replace(".ts", ".patched.ts");
   console.log("patchedFilePath", patchedFilePath);
   fs.writeFileSync(patchedFilePath, patched);
 
