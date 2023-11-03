@@ -10,7 +10,7 @@ interface Chunk {
 }
 
 function parsePatch(content: string): Patch {
-    const lines = content.split('\n').map(line => line.trim());
+    const lines = content.split('\n');
     const patch: Patch = { header: [], chunks: [] };
     let chunk: Chunk | null = null;
 
@@ -35,38 +35,43 @@ function parsePatch(content: string): Patch {
 }
 
 function applyPatch(original: string, patch: Patch): string {
-    const originalLines = original.split('\n').map(line => line.trim());
+    const originalLines = original.split('\n');
     let output: string[] = [];
     let currentIndex = 0;
 
     for (let chunk of patch.chunks) {
-        // Try to find the context before the chunk
-        let contextIndex = -1;
+        let foundContext = false;
+        // Search for context lines in original file to determine where the chunk applies
         for (let line of chunk.lines) {
             if (!line.startsWith('+') && !line.startsWith('-')) {
-                contextIndex = originalLines.indexOf(line, currentIndex);
-                if (contextIndex !== -1) {
-                    break;
+                const contextLine = line.trim();
+                while (currentIndex < originalLines.length) {
+                    if (originalLines[currentIndex].trim() === contextLine) {
+                        foundContext = true;
+                        break;
+                    }
+                    output.push(originalLines[currentIndex]);
+                    currentIndex++;
                 }
+                if (foundContext) break;
             }
         }
 
-        // Copy unchanged lines
-        while (currentIndex < contextIndex) {
-            output.push(originalLines[currentIndex]);
-            currentIndex++;
+        if (!foundContext) {
+            // If no context was found, just skip this chunk
+            continue;
         }
 
         // Apply patch chunk
         for (let line of chunk.lines) {
             if (line.startsWith('-')) {
-                // Skip line from original
+                // Remove line
                 currentIndex++;
             } else if (line.startsWith('+')) {
-                // Add line from patch
+                // Add line
                 output.push(line.slice(1));
             } else {
-                // Copy line from original
+                // Context line, keep from original
                 output.push(originalLines[currentIndex]);
                 currentIndex++;
             }
@@ -90,7 +95,7 @@ function patchFile(filePath: string, patchPath: string): void {
     const patch = parsePatch(patchContent);
     const result = applyPatch(originalContent, patch);
 
-    fs.writeFileSync(filePath + "_applied2", result);
+    fs.writeFileSync(filePath + "_applied3", result);
 }
 
 // Example usage
