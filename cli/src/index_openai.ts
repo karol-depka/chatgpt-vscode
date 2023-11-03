@@ -34,7 +34,6 @@ console.log(blue + `original file content:\n${origFileContent}` + "\x1b[0m");
 
 
 async function main() {
-
   const promptText = `Given this file:
 File: ${inputFilePath} :
 \`\`\`typescript
@@ -66,7 +65,9 @@ ${origFileContent}
   console.info("patched: \n \n", patched);
 
   const patchedFilePath = inputFilePath; // inputFilePath.replace(".ts", ".patched.ts");
-  console.log("patchedFilePath", patchedFilePath);
+  console.log("will write file - patchedFilePath: ", patchedFilePath);
+  checkFileNotModifiedInGitOrThrow(inputFilePath); // just before writing - check again git status
+
   fs.writeFileSync(patchedFilePath, patched);
 
   const end = performance.now();
