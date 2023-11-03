@@ -49,6 +49,15 @@ ${fileContent}
 
   console.log(`chatCompletion.choices`, chatCompletion.choices);
   console.log(`chatCompletion.choices...`, chatCompletion.choices[0].message.content);
+
+      const end = performance.now();
+    //   console.log(`Total time taken: ${end - start} ms.`);
+
+      const tokensUsed = chatCompletion!.usage!.total_tokens;
+      console.log(`Tokens used: ${tokensUsed}`);
+
+      const costInDollars = (tokensUsed * 0.06) / 1000; // assuming $0.06 per token
+      console.log(`Cost in dollars: $${costInDollars.toFixed(2)}`);
 }
 
 main();
