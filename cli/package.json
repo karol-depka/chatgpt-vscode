@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/index_openai.ts",
+    "test": "jest",
     "prepublish": "yarn build"
   },
   "keywords": [],
@@ -18,6 +19,11 @@
     "openai": "^4.14.2",
     "ts-node": "^version",
     "typescript": "^version"
+  },
+  "devDependencies": {
+    "@types/jest": "^latest",
+    "jest": "^latest",
+    "ts-jest": "^latest"
   },
   "bin": {
     "my-cli": "./dist/index.js"

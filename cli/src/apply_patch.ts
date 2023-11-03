@@ -36,7 +36,7 @@ function parsePatch(content: string): Patch {
     return patch;
 }
 
-function applyPatch(original: string, patch: Patch): string {
+export function applyPatch(original: string, patch: Patch): string {
     console.log('Applying patch...');
     const originalLines = original.split('\n');
     let output: string[] = [];
@@ -96,13 +96,12 @@ function applyPatch(original: string, patch: Patch): string {
 }
 
 // Main function
-function patchFile(filePath: string, patchPath: string): void {
+export function patchFile(filePath: string, patchPath: string): void {
     console.log(`Patching file ${filePath} with patch ${patchPath}...`);
     const originalContent = fs.readFileSync(filePath, 'utf-8');
     const patchContent = fs.readFileSync(patchPath, 'utf-8');
 
-    const patch = parsePatch(patchContent);
-    const result = applyPatch(originalContent, patch);
+    const result = applyPatchToViaStrings(patchContent, originalContent);
 
     fs.writeFileSync(filePath + ".applied.ts", result);
     console.log(`Finished patching file. Output written to ${filePath}.applied.ts`);
@@ -111,4 +110,11 @@ function patchFile(filePath: string, patchPath: string): void {
 // Example usage
 
 // patchFile('../../cli/src/index.ts', 'hello.patch');
-patchFile('apply_patch.ts', 'hello.patch');
+// patchFile('apply_patch.ts', 'hello.patch');
+
+export function applyPatchToViaStrings(patchContent: string, originalContent: string) {
+    const patch = parsePatch(patchContent);
+    const result = applyPatch(originalContent, patch);
+    return result;
+}
+
