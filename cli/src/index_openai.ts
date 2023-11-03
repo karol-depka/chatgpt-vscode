@@ -42,9 +42,9 @@ File: ${filePath} :
 \`\`\`
 ${origFileContent}
 \`\`\`
-    put it in a loop to execute 3 times
+    put it in a loop to execute 7 times. On odd iterations, it should print "odd!" and then print "odd it is".
     =====
-    Print me the output as .patch file that can be automatically applied.
+    Print me the output as .patch file that can be automatically applied. The patch should contain proper indentation.
     Just print the file patches. No explanations, no pleasantries, no prelude.
     Before each file you output, provide full file path.`;
   const chatCompletion = await openai.chat.completions.create({
