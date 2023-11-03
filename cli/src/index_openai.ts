@@ -6,12 +6,12 @@ import fs from "fs";
 import {
   applyPatchToViaStrings as applyPatchViaStrings,
   printColoredDiff,
-} from "./utils/apply_patch";
-import { extractCodeFromMarkdown } from "./utils/markdown_utils";
-import { customGuidelines } from "./custom_guidelines";
-import { formattingGuidelines } from "./formattingGuidelines";
+} from "./utils/patching/apply_patch";
+import { extractCodeFromMarkdown } from "./utils/markdown/markdown_utils";
+import { customGuidelines } from "./utils/prompting/custom_guidelines";
+import { formattingGuidelines } from "./utils/prompting/formattingGuidelines";
 import { yellow, reset, blue, green } from "./utils/colors";
-import { userPrompt } from "./userPrompt";
+import { userPrompt } from "./utils/prompting/userPrompt";
 import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 import { showCosts } from "./utils/openai/pricingCalc";
 
