@@ -1,9 +1,10 @@
+const red = "\x1b[31m";
+const yellow = "\x1b[33m";
+const blue = "\x1b[34m";
+const green = "\x1b[32m";
+const reset = "\x1b[0m";
 import OpenAI from "openai";
 import dotenv from "dotenv";
-console.log('\x1b[31m%s\x1b[33m%s\x1b[0m', 'Welcome to the program!','\n');
-// Red color: \x1b[31m, Yellow color: \x1b[33m, Reset color: \x1b[0m
-// The above line prints a welcome message in red and yellow colors at the start of the program.
-
 import { performance } from "perf_hooks";
 import fs from "fs";
 import { applyPatchToViaStrings as applyPatchViaStrings } from "./utils/apply_patch";
@@ -12,6 +13,8 @@ import { extractCodeFromMarkdown } from "./utils/markdown_utils";
 dotenv.config();
 
 console.log('initializing OpenAI')
+console.log(`${red}${yellow}Welcome to the program!${reset}`);
+console.log(`${blue}Original file content:${origFileContent}${reset}`);
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -72,6 +75,7 @@ ${origFileContent}
   console.debug(`responsePatch:` + responsePatch);
   const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patched: \n \n", patched);
+  console.log(`${green}New file content:${patched}${reset}`);
 
   const patchedFilePath = filePath.replace(".ts", ".patched.ts");
   console.log("patchedFilePath", patchedFilePath);
