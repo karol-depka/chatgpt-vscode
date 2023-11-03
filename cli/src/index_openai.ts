@@ -2,15 +2,16 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 import { performance } from "perf_hooks";
 import fs from "fs";
-import { applyPatchToViaStrings as applyPatchViaStrings } from "./utils/apply_patch";
+import { applyPatchToViaStrings as applyPatchViaStrings, printColoredDiff } from "./utils/apply_patch";
 import { extractCodeFromMarkdown } from "./utils/markdown_utils";
 
 const red = "\x1b[31m";
 const yellow = "\x1b[33m";
 const blue = "\x1b[34m";
 const green = "\x1b[32m";
+const reset = "\x1b[0m";
 
-console.log(yellow + "Welcome to MetaPrompting" + "\x1b[0m");
+console.log(yellow + "Welcome to MetaPrompting" + reset);
 
 dotenv.config();
 
@@ -20,8 +21,8 @@ const openai = new OpenAI({
 });
 
 // const filePath = `examples/hello7/hello.ts`;
-// const filePath = `examples/hello_simple/hello.ts`;
-const filePath = `src/utils/apply_patch.ts`;
+const filePath = `examples/hello_simple/hello.ts`;
+// const filePath = `src/utils/apply_patch.ts`;
 // const filePath = `src/index_openai.ts`;
 const origFileContent = fs.readFileSync(filePath, "utf8");
 console.log(blue + `original file content:${origFileContent}` + "\x1b[0m");
@@ -29,16 +30,16 @@ console.log(blue + `original file content:${origFileContent}` + "\x1b[0m");
 async function main() {
   //     print iteration numbers in the inner loop. Remove printing iteration number in the outer loop. Change divisibility from odd to div by 3.
 
-  //     make it say hello Earth
+  const userPrompt = `make it say hello Earth. Add nice terminal colors. Store color control sequences in const-s.`
 
   //     put it in a loop to execute 7 times. On odd iterations, it should print "odd!" and then print "odd it is". Wrap the whole code into a function and call it.
 
-  const userPrompt = `
-    add a an exported function \`printColoredDiff(diffStr: string)\` which prints diff using terminal colors.
-     Have the color&reset control sequences in const-s.
-    Print original file contents in blue.
-    Remember to switch color back to default. Without external libraries.
-`;
+//   const userPrompt = `
+//     add a an exported function \`printColoredDiff(diffStr: string)\` which prints diff using terminal colors.
+//      Have the color&reset control sequences in const-s.
+//     Print original file contents in blue.
+//     Remember to switch color back to default. Without external libraries.
+// `;
 
   const customGuidelines = [
     `Use strictest TypeScript settings in the code you generate.`,
@@ -54,10 +55,12 @@ ${origFileContent}
     ${userPrompt}
     =====
     ${customGuidelines.join("\n\n")}
-    
+
     
     Print me the output as .patch file that can be automatically applied. The patch should contain proper indentation.
-    Just print the file patches. No explanations, no pleasantries, no prelude.
+    Just print the file patches. No explanations, no pleasantries, no prelude. 
+    Always print me only the patches (each patch surrounded by markdown \`\`\`). Never print full file contents.
+    If there are source code comments in the file, keep them.
     Before each file you output, provide full file path.`;
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: "user", content: promptText }],
@@ -71,7 +74,9 @@ ${origFileContent}
   // console.debug(`chatCompletion.choices...`, responseContent);
   console.log(green + `responseContent:${responseContent}` + "\x1b[0m");
   const responsePatch = extractCodeFromMarkdown(responseContent!);
-  console.debug(`responsePatch:` + green + responsePatch + "\x1b[0m");
+  // console.debug(`responsePatch:` + green + responsePatch + "\x1b[0m");
+  console.debug(`responsePatch:`)
+  printColoredDiff(responsePatch);
   const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patched: \n \n", patched);
 
