@@ -65,7 +65,7 @@ ${origFileContent}
   console.info("patched: \n \n", patched);
 
   const patchedFilePath = inputFilePath; // inputFilePath.replace(".ts", ".patched.ts");
-  console.log("will write file - patchedFilePath: ", patchedFilePath);
+  console.log("will write file (after checking git status) - patchedFilePath: ", patchedFilePath);
   checkFileNotModifiedInGitOrThrow(inputFilePath); // just before writing - check again git status
 
   fs.writeFileSync(patchedFilePath, patched);
