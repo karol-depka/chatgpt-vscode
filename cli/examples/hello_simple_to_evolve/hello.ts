@@ -4,7 +4,7 @@ const blueBold = '\x1b[34m%s\x1b[1m';
 const reset = '\x1b[0m';
 
 for(let i = 0; i < 3; i++) {
-console.log(red, 'hello world') // red
+  if(i % 2 == 0) console.log(red, 'hello earth') // red
 console.debug('bye')
 console.log(blueBold, 'goodbye\x1b[0m') // blue, bold
 console.log(blueBold, 'goodbye\x1b[0m') // blue, bold
