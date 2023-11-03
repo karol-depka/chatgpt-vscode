@@ -1,5 +1,23 @@
 import { applyPatch, applyPatchToViaStrings } from './apply_patch'; // replace with your actual module name
 
+// TODO: no context: No context found for chunk, skipping...
+// --- a/examples/hello_simple/hello.ts
+// +++ b/examples/hello_simple/hello.ts
+// @@ -1,4 +1,14 @@
+// -// start
+// -console.log('hello world')
+// -console.debug('bye')
+// -// end
+// +function repeatHello() {
+// +  for (let i = 0; i < 7; i++) {
+// +    console.log('\x1b[31m', 'hello world'); // red
+// +    console.debug('\x1b[33m', 'bye'); // yellow
+// +  }
+// +  console.log('\x1b[34m\x1b[1m', 'Goodnight!'); // blue and bold
+// +}
+// +
+// +repeatHello();
+
 describe('Patch tests', () => {
 
 
