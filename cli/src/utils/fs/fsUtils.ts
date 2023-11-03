@@ -1,7 +1,7 @@
 import {FileContentStr, FilePathStr} from "../types";
 import fs from "fs";
 
-export function readFile(inputFilePath: FilePathStr) {
+export function readFileFromPath(inputFilePath: FilePathStr) {
   return fs.readFileSync(
       inputFilePath,
       "utf8"

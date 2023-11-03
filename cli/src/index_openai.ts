@@ -4,7 +4,7 @@ import { execSync } from "child_process";
 import { performance } from "perf_hooks";
 import fs from "fs";
 import {
-  applyPatchToViaStrings as applyPatchViaStrings,
+  applyPatchToViaStrings as applyPatchViaStrings, patchFileIfSafeOrThrow,
   printColoredDiff,
 } from "./utils/patching/apply_patch";
 import { extractCodeFromMarkdown } from "./utils/markdown/markdown_utils";
@@ -16,7 +16,7 @@ import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 import { showCosts } from "./utils/openai/pricingCalc";
 import { makeCodeBlockForPrompt } from "./utils/markdown/generateMarkdown";
 import { FilePathStr, FileContentStr, PatchContentStr } from "./utils/types";
-import {readFile} from "./utils/fs/fsUtils";
+import {readFileFromPath} from "./utils/fs/fsUtils";
 
 console.log(yellow + "Welcome to " + red + " MetaPrompting Technology" + reset);
 
@@ -32,7 +32,7 @@ const openai = new OpenAI({
 
 checkFileNotModifiedInGitOrThrow(inputFilePath);
 
-const origFileContent = readFile(inputFilePath);
+const origFileContent = readFileFromPath(inputFilePath);
 
 async function main() {
   const fullPromptTextToSend = `
@@ -57,24 +57,14 @@ async function main() {
   const responseContent = chatCompletion.choices[0].message.content;
   // console.debug(`chatCompletion.choices...`, responseContent);
   console.log(green + `responseContent:${responseContent}` + "\x1b[0m");
-  const responsePatch = extractCodeFromMarkdown(responseContent!) as PatchContentStr;
+  const responsePatch = extractCodeFromMarkdown(
+    responseContent!
+  ) as PatchContentStr;
   // console.debug(`responsePatch:` + green + responsePatch + "\x1b[0m");
   console.debug(`responsePatch:`);
   printColoredDiff(responsePatch);
-  const patchedFileContents = applyPatchViaStrings(
-    responsePatch,
-    origFileContent
-  ); /// WARNING: PATCH IS FIRST ARG, then ORIG content
-  // console.info("patchedFileContents: \n \n", patchedFileContents);
-
   const patchedFilePath = inputFilePath; // inputFilePath.replace(".ts", ".patched.ts");
-  console.log(
-    "will write file (after checking git status) - patchedFilePath: ",
-    patchedFilePath
-  );
-  checkFileNotModifiedInGitOrThrow(inputFilePath); // just before writing - check again git status
-
-  fs.writeFileSync(patchedFilePath, patchedFileContents);
+  patchFileIfSafeOrThrow(patchedFilePath, origFileContent, responsePatch);
 
   const end = performance.now();
   //   console.log(`Total time taken: ${end - start} ms.`);

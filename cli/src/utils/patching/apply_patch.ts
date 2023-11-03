@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import { FileContentStr, FilePathStr, PatchContentStr, PatchFilePathStr } from '../types';
 import { blue, green, red, reset } from '../colors';
+import {checkFileNotModifiedInGitOrThrow} from "../git/gitUtils";
+import {readFileFromPath} from "../fs/fsUtils";
 
 interface Patch {
     header: string[];
@@ -134,4 +136,34 @@ export function printColoredDiff(diffStr: PatchContentStr): void {
       console.log(`${blue}${line}${reset}`);
     }
   }
+}
+
+
+function checkFileContentIsSameOrThrow(filePath: FilePathStr, baseContent: FileContentStr) {
+    const currentContent = readFileFromPath(filePath);
+    if ( currentContent !== baseContent ) {
+        throw new Error(
+            `The file ${filePath} has been modified since the base content was generated. 
+            Please revert it to the original state before running this script. 
+            Content: \n\n${currentContent}`
+        );
+    }
+}
+
+export function patchFileIfSafeOrThrow(
+    pathOfFileToPatch: FilePathStr,
+    baseContent: FileContentStr,
+    patch: PatchContentStr) 
+{
+  checkFileNotModifiedInGitOrThrow(pathOfFileToPatch); // just before writing - check again git status
+  checkFileContentIsSameOrThrow(pathOfFileToPatch, baseContent);
+  const patchedFileContents = applyPatchToViaStrings(patch, baseContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
+  // console.info("patchedFileContents: \n \n", patchedFileContents);
+
+  console.log(
+    "will write file (after checking git status) - patchedFilePath: ",
+    pathOfFileToPatch
+  );
+
+  fs.writeFileSync(pathOfFileToPatch, patchedFileContents);
 }

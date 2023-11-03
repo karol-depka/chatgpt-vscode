@@ -12,4 +12,5 @@
 // -32K context	$0.06 / 1K tokens	$0.12 / 1K tokens
 // -
 // -`;
-export const userPrompt = `make the code be showing response via streaming in realtime, as it arrives`;
+// export const userPrompt = `make the code be showing response via streaming in realtime, as it arrives`;
+export const userPrompt = `make a loop to repeat the greeting 3 times`;
