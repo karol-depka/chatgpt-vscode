@@ -36,10 +36,9 @@ if (gitStatus.length > 0) {
 
 // const filePath = `src/index_openai.ts`;
 const origFileContent = fs.readFileSync(inputFilePath, "utf8");
-console.log(blue + `original file content:${origFileContent}` + "\x1b[0m");
+console.log(blue + `original file content:\n${origFileContent}` + "\x1b[0m");
 
 async function main() {
-
 
   const promptText = `Given this file:
 File: ${inputFilePath} :
@@ -71,7 +70,7 @@ ${origFileContent}
   const patched = applyPatchViaStrings(responsePatch, origFileContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   console.info("patched: \n \n", patched);
 
-  const patchedFilePath = inputFilePath.replace(".ts", ".patched.ts"); // TODO check if file not modified in git
+  const patchedFilePath = inputFilePath.replace(".ts", ".patched.ts");
   console.log("patchedFilePath", patchedFilePath);
   fs.writeFileSync(patchedFilePath, patched);
 
