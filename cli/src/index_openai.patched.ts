@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 import dotenv from "dotenv";
-console.log('\x1b[31m%s\x1b[33m%s\x1b[0m', 'Welcome to the program!', ''); // Red and Yellow colors
+console.log('\x1b[31m%s\x1b[33m%s\x1b[0m', 'Welcome to the program!','\n');
+// Red color: \x1b[31m, Yellow color: \x1b[33m, Reset color: \x1b[0m
+// The above line prints a welcome message in red and yellow colors at the start of the program.
 
 import { performance } from "perf_hooks";
 import fs from "fs";
@@ -10,7 +12,6 @@ import { extractCodeFromMarkdown } from "./utils/markdown_utils";
 dotenv.config();
 
 console.log('initializing OpenAI')
-console.log('\x1b[0m', ''); // Reset color
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -47,7 +48,10 @@ File: ${filePath} :
 \`\`\`
 ${origFileContent}
 \`\`\`
-    At the start of the program, print a welcome message in nice terminal colors - red and yellow colors. Remember to switch color back to default. Without external libraries.
+    At the start of the program, print a welcome message in nice terminal colors - red and yellow colors. 
+    Print original file contents in blue.
+    Print new file contents in green.
+    Remember to switch color back to default. Without external libraries.
 
     =====
 

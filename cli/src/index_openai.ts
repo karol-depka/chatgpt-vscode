@@ -44,7 +44,10 @@ File: ${filePath} :
 \`\`\`
 ${origFileContent}
 \`\`\`
-    At the start of the program, print a welcome message in nice terminal colors - red and yellow colors. Remember to switch color back to default. Without external libraries.
+    At the start of the program, print a welcome message in nice terminal colors - red and yellow colors. 
+    Print original file contents in blue.
+    Print new file contents in green.
+    Remember to switch color back to default. Without external libraries.
 
     =====
 
