@@ -7,7 +7,9 @@ echo
 echo ========= 
 echo
 
-patch -l hello.ts < hello.patch
+# patch -l hello.ts < hello.patch
 # patch hello.ts < hello.patch
 
-tsc hello.ts
+ts-node apply_patch.ts
+
+ts-node hello.ts.applied.ts

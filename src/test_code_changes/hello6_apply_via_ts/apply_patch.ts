@@ -95,7 +95,7 @@ function patchFile(filePath: string, patchPath: string): void {
     const patch = parsePatch(patchContent);
     const result = applyPatch(originalContent, patch);
 
-    fs.writeFileSync(filePath + "_applied3", result);
+    fs.writeFileSync(filePath + ".applied.ts", result);
 }
 
 // Example usage

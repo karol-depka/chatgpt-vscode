@@ -1,6 +1,6 @@
 const startTime = Date.now();
 
-for (let i = 1; i <= 99; i++) {
+for (let i = 1; i <= 3; i++) {
     console.log(`Iteration: ${i}`);
     if (i % 2 === 0) {
         for (let j = 0; j < 7; j++) {
@@ -9,4 +9,5 @@ for (let i = 1; i <= 99; i++) {
     }
 }
 
-console.log(`Total time taken: ${Date.now() - startTime}ms`);
+console.log(`Total time taken: ${(Date.now() - startTime) / 1000}s`);
+console.log("goodbye");

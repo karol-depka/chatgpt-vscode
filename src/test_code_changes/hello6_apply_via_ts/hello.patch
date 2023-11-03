@@ -1,15 +1,18 @@
 --- hello.ts
 +++ hello.ts
-@@ -1,0 +1,5 @@
-+const startTime = Date.now();
-+
- for (let i = 1; i <= 99; i++) {
-+    console.log(`Iteration: ${i}`);
+@@ -1,11 +1,11 @@
+ const startTime = Date.now();
+ 
+-for (let i = 1; i <= 99; i++) {
++for (let i = 1; i <= 3; i++) {
+     console.log(`Iteration: ${i}`);
      if (i % 2 === 0) {
          for (let j = 0; j < 7; j++) {
              console.log(`hi`);
-        }
-    }
-}
-+
-+console.log(`Total time taken: ${Date.now() - startTime}ms`);
+         }
+     }
+ }
+ 
+-console.log(`Total time taken: ${Date.now() - startTime}ms`);
++console.log(`Total time taken: ${(Date.now() - startTime) / 1000}s`);
++console.log("goodbye");
