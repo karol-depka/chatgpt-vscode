@@ -16,7 +16,9 @@ function parsePatch(content: string): Patch {
     let chunk: Chunk | null = null;
 
     for (let line of lines) {
-        if (line.startsWith('@@')) {
+        if (line.startsWith('---') || line.startsWith('+++')) {
+            patch.header.push(line);
+        } else if (line.startsWith('@@')) {
             if (chunk) {
                 patch.chunks.push(chunk);
             }
@@ -117,4 +119,3 @@ export function applyPatchToViaStrings(patchContent: string, originalContent: st
     const result = applyPatch(originalContent, patch);
     return result;
 }
-
