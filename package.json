@@ -1,5 +1,5 @@
 {
-  "name": "chatgpt -> MetaPrompting",
+  "name": "chatgpt_metaPrompting",
   "displayName": "ChatGPT -> MetaPrompting",
   "description": "Use ChatGPT and GPT4 right inside the IDE to enhance and automate your coding with AI-powered assistance (unofficial)",
   "version": "1.1.2",
@@ -41,35 +41,35 @@
     "commands": [
       {
         "command": "chatgpt.ask",
-        "title": "Ask ChatGPT"
+        "title": "Ask ChatGPT / MetaPrompt"
       },
       {
         "command": "chatgpt.explain",
-        "title": "ChatGPT: Explain selection"
+        "title": "ChatGPT / MetaPrompt: Explain selection"
       },
       {
         "command": "chatgpt.refactor",
-        "title": "ChatGPT: Refactor selection"
+        "title": "ChatGPT / MetaPrompt: Refactor selection"
       },
       {
         "command": "chatgpt.findProblems",
-        "title": "ChatGPT: Find problems"
+        "title": "ChatGPT / MetaPrompt: Find problems"
       },
       {
         "command": "chatgpt.optimize",
-        "title": "ChatGPT: Optimize selection"
+        "title": "ChatGPT / MetaPrompt: Optimize selection"
       },
       {
         "command": "chatgpt.documentation",
-        "title": "ChatGPT: Write documentation"
+        "title": "ChatGPT / MetaPrompt: Write documentation"
       },
       {
         "command": "chatgpt.resetConversation",
-        "title": "Reset ChatGPT conversation"
+        "title": "Reset ChatGPT / MetaPrompt conversation"
       },
       {
         "command": "chatgpt.tryAgain",
-        "title": "Retry ChatGPT request"
+        "title": "Retry ChatGPT / MetaPrompt request"
       }
     ],
     "menus": {
