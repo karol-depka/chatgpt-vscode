@@ -36,13 +36,13 @@ console.log(blue + `original file content:\n${origFileContent}` + "\x1b[0m");
 
 async function main() {
   const fullPromptTextToSend = `
-\`\`\`typescript
-${origFileContent}
-\`\`\`
-    Given the files listed below, do this:
+    Given the files listed below, perform those changes to the files:
     ${userPrompt}
     
     File: ${inputFilePath} :
+\`\`\`typescript
+${origFileContent}
+\`\`\`
     =====
     ${customGuidelines.join("\n\n")}
 
