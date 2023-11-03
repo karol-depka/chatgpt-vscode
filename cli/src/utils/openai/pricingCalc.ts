@@ -2,12 +2,13 @@ import OpenAI from "openai";
 
 export function showCosts(chatCompletion: OpenAI.Chat.Completions.ChatCompletion) {
   // https://openai.com/pricing
+  
+  const tokensUsed = chatCompletion!.usage!.total_tokens;
   const inputTokens = chatCompletion!.usage!.prompt_tokens;
   const outputTokens = tokensUsed - inputTokens;
 
   console.log(`Input tokens: ${inputTokens}`);
   console.log(`Output tokens: ${outputTokens}`);
-  const tokensUsed = chatCompletion!.usage!.total_tokens;
   const inputCost = (inputTokens * 0.06) / 1000;
   const outputCost = (outputTokens * 0.06) / 1000;
   const totalCost = inputCost + outputCost;
