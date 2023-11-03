@@ -16,8 +16,8 @@ const openai = new OpenAI({
 
 // const filePath = `examples/hello7/hello.ts`;
 const filePath = `examples/hello_simple/hello.ts`;
-const fileContent = fs.readFileSync(filePath, "utf8");
-console.log(`original file content:${fileContent}`);
+const origFileContent = fs.readFileSync(filePath, "utf8");
+console.log(`original file content:${origFileContent}`);
 // const fileContent = `const startTime = Date.now();
 
 // for (let i = 1; i <= 99; i++) {
@@ -36,9 +36,9 @@ async function main() {
   //     print iteration numbers in the inner loop. Remove printing iteration number in the outer loop. Change divisibility from odd to div by 3.
 
   const promptText = `Given this file: 
-File: ${filePath}
+File: ${filePath} :
 \`\`\`
-${fileContent}    
+${origFileContent}
 \`\`\`
     make it say hello Earth
     =====
@@ -58,7 +58,7 @@ ${fileContent}
   console.debug(`chatCompletion.choices...`, responseContent);
   const responsePatch = extractCodeFromMarkdown(responseContent!);
   console.debug(`responsePatch:` + responsePatch);
-  const patched = applyPatchViaStrings(fileContent, responsePatch);
+  const patched = applyPatchViaStrings(origFileContent, responsePatch);
   console.info("patched: \n \n", patched);
 
   const end = performance.now();

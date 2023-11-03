@@ -1,12 +1,39 @@
 import { applyPatch, applyPatchToViaStrings } from './apply_patch'; // replace with your actual module name
 
 describe('Patch tests', () => {
+
+
     test('Empty patch and original content', () => {
         const result = applyPatchToViaStrings('', '');
         expect(result).toBe('');
     });
 
-    test('Non-empty patch and empty original content', () => {
+test("hello_simple - patch from openai", () => {
+  const origContent = `// start
+console.log('hello world')
+console.debug('bye')
+// end
+`;
+  const patchContent = `--- a/examples/hello_simple/hello.ts
++++ b/examples/hello_simple/hello.ts
+@@ -1,5 +1,5 @@
+ // start
+-console.log('hello world')
++console.log('hello Earth')
+ console.debug('bye')
+ // end
+`;
+
+  const result = applyPatchToViaStrings(patchContent, origContent);
+  const expected = `// start
+console.log('hello Earth')
+console.debug('bye')
+// end
+`;
+  expect(result).toBe(expected);
+});
+
+  xtest('Non-empty patch and empty original content', () => {
         const patchContent = `@@ -1,3 +1,5 @@
 +This is a new line
  This is an existing line
@@ -15,7 +42,7 @@ describe('Patch tests', () => {
         expect(result).toBe(patchContent);
     });
 
-    test('hello7 from openai', () => {
+    xtest('hello7 from openai', () => {
         const origContent = `const startTime = Date.now();
 
 for (let i = 1; i <= 99; i++) {

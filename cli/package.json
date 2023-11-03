@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node src/index_openai.ts",
-    "test": "jest",
+    "start": "rm -rf dist && ts-node src/index_openai.ts",
+    "test": "rm -rf dist && jest",
     "prepublish": "yarn build"
   },
   "keywords": [],
