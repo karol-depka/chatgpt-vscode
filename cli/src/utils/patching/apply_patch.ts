@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { FileContentStr, FilePathStr, PatchContentStr, PatchFilePathStr } from '../types';
+import { FileContent, FilePath, PatchContentStr, PatchFilePathStr } from '../types';
 import { blue, green, red, reset } from '../colors';
 import {checkFileNotModifiedInGitOrThrow} from "../git/gitUtils";
 import {readFileFromPath} from "../fs/fsUtils";
@@ -42,7 +42,7 @@ function parsePatch(content: string): Patch {
     return patch;
 }
 
-export function applyPatch(original: FileContentStr, patch: Patch): string {
+export function applyPatch(original: FileContent, patch: Patch): string {
     console.log('Applying patch...');
     const originalLines = original.split('\n');
     let output: string[] = [];
@@ -102,9 +102,9 @@ export function applyPatch(original: FileContentStr, patch: Patch): string {
 }
 
 // Main function
-export function patchFile(filePath: FilePathStr, patchPath: PatchFilePathStr): void {
+export function patchFile(filePath: FilePath, patchPath: PatchFilePathStr): void {
   console.log(`Patching file ${filePath} with patch ${patchPath}...`);
-  const originalContent = fs.readFileSync(filePath, "utf-8") as FileContentStr;
+  const originalContent = fs.readFileSync(filePath, "utf-8") as FileContent;
   const patchContent = fs.readFileSync(patchPath, "utf-8") as PatchContentStr;
 
   const result = applyPatchToViaStrings(patchContent, originalContent);
@@ -117,7 +117,7 @@ export function patchFile(filePath: FilePathStr, patchPath: PatchFilePathStr): v
 
 export function applyPatchToViaStrings(
     patchContent: PatchContentStr, 
-    originalContent: FileContentStr) 
+    originalContent: FileContent)
 {
     const patch = parsePatch(patchContent);
     const result = applyPatch(originalContent, patch);
@@ -139,7 +139,7 @@ export function printColoredDiff(diffStr: PatchContentStr): void {
 }
 
 
-function checkFileContentIsSameOrThrow(filePath: FilePathStr, baseContent: FileContentStr) {
+function checkFileContentIsSameOrThrow(filePath: FilePath, baseContent: FileContent) {
     const currentContent = readFileFromPath(filePath);
     if ( currentContent !== baseContent ) {
         throw new Error(
@@ -151,8 +151,8 @@ function checkFileContentIsSameOrThrow(filePath: FilePathStr, baseContent: FileC
 }
 
 export function patchFileIfSafeOrThrow(
-    pathOfFileToPatch: FilePathStr,
-    baseContent: FileContentStr,
+    pathOfFileToPatch: FilePath,
+    baseContent: FileContent,
     patch: PatchContentStr) 
 {
   checkFileNotModifiedInGitOrThrow(pathOfFileToPatch); // just before writing - check again git status

@@ -15,15 +15,18 @@ import { yellow, reset, blue, green, red } from "./utils/colors";
 import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 import { showCosts } from "./utils/openai/pricingCalc";
 import { makeCodeBlockForPrompt } from "./utils/markdown/generateMarkdown";
-import { FilePathStr, FileContentStr, PatchContentStr } from "./utils/types";
+import { FilePath, FileContent, PatchContentStr } from "./utils/types";
 import {readFileFromPath} from "./utils/fs/fsUtils";
+import {makePrompt} from "./utils/prompting/makePrompt";
+import {FileToPatch} from "./utils/patching/types";
 
 console.log(yellow + "Welcome to " + red + " MetaPrompting Technology" + reset);
 
 dotenv.config();
 const userPrompt = process.argv[3] as string // || userPrompt;
 
-const inputFilePath = process.argv[2] as FilePathStr;
+const inputFilePath = process.argv[2] as FilePath;
+
 console.log(blue + "inputFilePath: " + reset, inputFilePath);
 console.log(blue + "userPrompt: " + reset, userPrompt);
 console.log("initializing OpenAI");
@@ -35,18 +38,18 @@ checkFileNotModifiedInGitOrThrow(inputFilePath);
 
 const origFileContent = readFileFromPath(inputFilePath);
 
-async function main() {
-  const fullPromptTextToSend = `
-    Given the files listed below, perform those changes to the files:
-    ${userPrompt}
-    ${makeCodeBlockForPrompt(inputFilePath, origFileContent)}
-    =====
-    ${customGuidelines.join("\n\n")}
 
-    ==== Here I give you general output formatting guidelines - you must follow them!
-    ${formattingGuidelines.join("\n\n")}
-`;
-  console.log(blue + "fullPromptTextToSend:\n" + reset, fullPromptTextToSend);
+/** Later: FileChunksToPatch or smth like that even with AST coordinates */
+const filesToPatch: FileToPatch[] = [
+  {
+    filePath: inputFilePath,
+    baseContent: origFileContent
+  }
+]
+
+
+async function main() {
+  const fullPromptTextToSend = makePrompt(userPrompt, filesToPatch);
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: "user", content: fullPromptTextToSend }],
     // model: "gpt-3.5-turbo",

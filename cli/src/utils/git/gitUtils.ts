@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
-import {FilePathStr} from "../types";
+import {FilePath} from "../types";
 
-export function checkFileNotModifiedInGitOrThrow(filePath: FilePathStr) {
+export function checkFileNotModifiedInGitOrThrow(filePath: FilePath) {
   const gitStatus = execSync(`git status --porcelain ${filePath}`).toString();
   if (gitStatus.length > 0) {
     throw new Error(
