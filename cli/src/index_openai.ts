@@ -16,6 +16,7 @@ import { checkFileNotModifiedInGitOrThrow } from "./utils/git/gitUtils";
 import { showCosts } from "./utils/openai/pricingCalc";
 import { makeCodeBlockForPrompt } from "./utils/markdown/generateMarkdown";
 import { FilePathStr, FileContentStr, PatchContentStr } from "./utils/types";
+import {readFile} from "./utils/fs/fsUtils";
 
 console.log(yellow + "Welcome to " + red + " MetaPrompting Technology" + reset);
 
@@ -30,10 +31,8 @@ const openai = new OpenAI({
 });
 
 checkFileNotModifiedInGitOrThrow(inputFilePath);
-const origFileContent = fs.readFileSync(
-  inputFilePath,
-  "utf8"
-) as FileContentStr;
+
+const origFileContent = readFile(inputFilePath);
 
 async function main() {
   const fullPromptTextToSend = `

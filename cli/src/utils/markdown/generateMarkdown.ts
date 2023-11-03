@@ -19,7 +19,9 @@ export function makeCodeBlockForPrompt(
 
   // \`\`\`${fileType}
 
-  return `File at path: ${filePath} :
+  return `
+
+File at path: ${filePath} :
 \`\`\`
 ${fileContent}
 \`\`\`
