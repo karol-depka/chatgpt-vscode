@@ -22,12 +22,12 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   });
 
   console.log(chalk.inverse("sendFullPrompt:"));
-  const model = "gpt-3.5-turbo";
+  // const model = "gpt-3.5-turbo";
+  const model = "gpt-4";
   console.log('Using model ' + chalk.blue(model));
   const body: ChatCompletionCreateParamsNonStreaming = {
     messages: [{ role: "user", content: fullPromptTextToSend }],
     model: model,
-    // model: "gpt-4",
     // temperature: 0,
     top_p: 0.1,
     // stream: true,

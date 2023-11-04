@@ -9,7 +9,7 @@ import { MPPromptInputs } from "./types";
 /* Note: this makes GPT4 assumptions, like guidelines, markdown; will see how other LLM-s communicate */
 export function makePrompt(promptInputs: MPPromptInputs): MPFullLLMPrompt {
   const titledFileCodeBlocks = promptInputs.filesToPatch.map((f) =>
-    makeCodeBlockForPrompt(f.filePath, f.baseContent)
+    makeCodeBlockForPrompt(f.filePath, f.baseContent /* TODO introduce MPFileWithTitleAndContents or smth */)
   );
   const fullPromptTextToSend = `
 Given the files listed below, perform those changes to the files:
