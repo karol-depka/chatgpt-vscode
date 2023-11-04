@@ -102,7 +102,7 @@ async function main() {
   }
   patchFileIfSafeOrThrow(fileToPatchToApply);
 
-    showCosts(chatCompletion);
+    // showCosts(chatCompletion);
 
     require("ts-node").register();
     console.log("===== Will execute", coloredFilePath(patchedFilePath));
