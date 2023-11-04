@@ -1,6 +1,6 @@
 import { applyPatch, applyPatchToViaStrings } from './apply_patch';
 import {patch} from "./makePatch";
-import {MPFileContent} from "../types"; // replace with your actual module name
+import {MPFileContentBase} from "../types"; // replace with your actual module name
 
 // TODO: no context: No context found for chunk, skipping...
 // --- a/examples/hello_simple/hello.ts
@@ -23,7 +23,7 @@ import {MPFileContent} from "../types"; // replace with your actual module name
 describe('Patch tests', () => {
 
     test('Empty patch and original content', () => {
-        const result = applyPatchToViaStrings(patch(''), '' as MPFileContent);
+        const result = applyPatchToViaStrings(patch(''), '' as MPFileContentBase);
         expect(result).toBe('');
     });
 
@@ -32,7 +32,7 @@ test("hello_simple - patch from openai, but without whitespace", () => {
 console.log('hello world')
 console.debug('bye')
 // end
-` as MPFileContent;
+` as MPFileContentBase;
   const patchContent = patch(`--- a/examples/hello_simple/hello.ts
 +++ b/examples/hello_simple/hello.ts
 @@ -1,5 +1,5 @@
@@ -57,7 +57,7 @@ test("hello_simple - patch from openai with whitespace", () => {
 console.log('hello world')
 console.debug('bye')
 // end
-` as MPFileContent;
+` as MPFileContentBase;
   const patchContent = patch(`--- examples/hello_simple/hello.ts
 +++ examples/hello_simple/hello.ts
 @@ -1,4 +1,4 @@
@@ -81,7 +81,7 @@ console.debug('bye')
 +This is a new line
  This is an existing line
 +This is another new line`);
-        const result = applyPatchToViaStrings(patchContent, '' as MPFileContent);
+        const result = applyPatchToViaStrings(patchContent, '' as MPFileContentBase);
         expect(result).toBe(patchContent);
     });
 
@@ -98,7 +98,7 @@ for (let i = 1; i <= 99; i++) {
 }
 
 console.log(\`Total time taken: \${Date.now() - startTime}ms\`);
-` as MPFileContent;
+` as MPFileContentBase;
         const patchContent = patch(`--- a/examples/hello7/hello.ts
 +++ b/examples/hello7/hello.ts
 @@ -1,12 +1,12 @@
@@ -123,14 +123,14 @@ console.log(\`Total time taken: \${Date.now() - startTime}ms\`);
 
     test('Empty patch and non-empty original content', () => {
         const originalContent = `This is an existing line
-This is another existing line` as MPFileContent;
+This is another existing line` as MPFileContentBase;
         const result = applyPatchToViaStrings(patch(''), originalContent);
         expect(result).toBe(originalContent);
     });
 
     test('Non-empty patch and non-empty original content', () => {
         const originalContent = `This is an existing line
-This is another existing line` as MPFileContent;
+This is another existing line` as MPFileContentBase;
         const patchContent = patch(`@@ -1,2 +1,4 @@
 +This is a new line
  This is an existing line
@@ -153,7 +153,7 @@ This is another existing line`;
             patchContent += `@@ -${i},1 +${i},2\n+This is a new line\n This is line ${i}\n`;
             expectedContent += `This is a new line\nThis is line ${i}\n`;
         }
-        const result = applyPatchToViaStrings(patch(patchContent), originalContent as MPFileContent);
+        const result = applyPatchToViaStrings(patch(patchContent), originalContent as MPFileContentBase);
         expect(result).toBe(expectedContent);
     });
 });

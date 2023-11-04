@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import { makeFullPrompt } from "../prompting/makeFullPrompt";
+import { performance } from 'perf_hooks';
 import { MPFullLLMPrompt, MPPatchContent } from "../types";
 import { MPPromptInputs } from "../prompting/types";
 import chalk from 'chalk'
@@ -17,6 +18,8 @@ export async function makeAndSendFullPrompt(promptInputs: MPPromptInputs) {
 
 export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   console.log(chalk.green("initializing OpenAI"));
+  const t0 = performance.now();
+
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -32,9 +35,12 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
     top_p: 0.1,
     // stream: true,
   };
-  console.log(chalk.green("calling openai.chat.completions.create body", body));
+  console.log(chalk.green("calling openai.chat.completions.create body"), body);
   const chatCompletion = await openai.chat.completions.create(body);
   // console.log(chalk.inverse("END sendFullPrompt"));
+  const t1 = performance.now();
+  const timeTaken = ((t1 - t0) / 1000).toFixed(1);
+  console.log(`API request took ${timeTaken} seconds`);
 
   // console.debug(`chatCompletion.choices`, chatCompletion.choices);
   const responseContent = chatCompletion.choices[0].message.content;
@@ -43,5 +49,7 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   const responsePatch = extractCodeFromMarkdown(
     responseContent!
   ) as MPPatchContent;
-  return { chatCompletion, responsePatch };
+  return { chatCompletion, responsePatch, printCostsFunc: () => {
+    // FIXME
+  } };
 }

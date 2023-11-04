@@ -1,4 +1,8 @@
-// describe('E2E tests - including LLM and file modifications and executing resulting file', () => {
+describe('E2E tests - including LLM and file modifications and executing resulting file', () => {
+    test('verySimpleE2E_With_LLM', () => {
+        // Could even launch it via command line: yarn start
+    })
+
 //     // some stuff that is reliable to not have flaky tests cause LLM randomness;
 //     // e.g. skip whitespaces / indent
 //
@@ -20,4 +24,4 @@
 //  // end
 // `);
 //
-// })
+})

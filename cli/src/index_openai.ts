@@ -102,11 +102,6 @@ async function main() {
   }
   patchFileIfSafeOrThrow(fileToPatchToApply);
 
-  const end = performance.now();
-  //   console.log(`Total time taken: ${end - start} ms.`);
-  // if (!argv.dryRun) {
-    //   console.log(`Total time taken: ${end - start} ms.`);
-
     showCosts(chatCompletion);
 
     require("ts-node").register();
