@@ -46,9 +46,12 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   const t1 = performance.now();
   const timeTaken = ((t1 - t0) / 1000).toFixed(1);
   console.log(`API request took ${timeTaken} seconds`);
-
+  let fullOutput = ''
   for await (const chunk of completion) {
-    console.log('chunk', chunk.choices[0].delta.content);
+    // console.log('chunk', chunk.choices[0].delta.content);
+    let chunkContent = chunk.choices[0].delta.content;
+    fullOutput += chunkContent;
+    process.stdout.write(chunkContent !);
   }
 
   // console.debug(`chatCompletion.choices`, chatCompletion.choices);
