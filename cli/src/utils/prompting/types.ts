@@ -1,7 +1,7 @@
-import { FileToPatch } from "../patching/types";
+import { MPFileToPatch } from "../patching/types";
 import { MPUserPrompt } from "../types";
 
-export type FilesToPatch = FileToPatch[];
+export type FilesToPatch = MPFileToPatch[];
 
 export interface MPPromptInputs {
   userPrompt: MPUserPrompt;

@@ -1,8 +1,9 @@
 import * as fs from 'fs';
-import { MPFileContent, MPFilePath, MPPatchContent, MPPatchFilePath } from '../types';
+import {MPFileContent, MPFileContentBase, MPFilePath, MPPatchContent, MPPatchFilePath} from '../types';
 import { blue, green, red, reset } from '../colors';
 import {checkFileNotModifiedInGitOrThrow} from "../git/gitUtils";
 import {coloredFilePath, readFileFromPath} from "../fs/fsUtils";
+import {MPFileToPatch, MPFileToPatchToApply} from "./types";
 
 interface Patch {
     header: string[];
@@ -42,7 +43,7 @@ function parsePatch(content: string): Patch {
     return patch;
 }
 
-export function applyPatch(original: MPFileContent, patch: Patch): string {
+export function applyPatch(original: MPFileContentBase, patch: Patch): string {
     console.log('Applying patch...');
     const originalLines = original.split('\n');
     let output: string[] = [];
@@ -104,7 +105,7 @@ export function applyPatch(original: MPFileContent, patch: Patch): string {
 
 export function patchFile(filePath: MPFilePath, patchPath: MPPatchFilePath): void {
   console.log(`Patching file ${coloredFilePath(filePath)} with patch file ${coloredFilePath(patchPath as string as MPFilePath)}...`);
-  const originalContent = fs.readFileSync(filePath, "utf-8") as MPFileContent;
+  const originalContent = fs.readFileSync(filePath, "utf-8") as MPFileContentBase;
   const patchContent = fs.readFileSync(patchPath, "utf-8") as MPPatchContent;
 
   const result = applyPatchToViaStrings(patchContent, originalContent);
@@ -117,7 +118,7 @@ export function patchFile(filePath: MPFilePath, patchPath: MPPatchFilePath): voi
 
 export function applyPatchToViaStrings(
     patchContent: MPPatchContent,
-    originalContent: MPFileContent)
+    originalContent: MPFileContentBase)
 {
     const patch = parsePatch(patchContent);
     const result = applyPatch(originalContent, patch);
@@ -139,9 +140,9 @@ export function printColoredDiff(diffStr: MPPatchContent): void {
 }
 
 
-function checkFileContentIsSameOrThrow(filePath: MPFilePath, baseContent: MPFileContent) {
+function checkFileContentIsSameOrThrow(filePath: MPFilePath, baseContent: MPFileContentBase) {
     const currentContent = readFileFromPath(filePath);
-    if ( currentContent !== baseContent ) {
+    if ( currentContent !== (baseContent as string as MPFileContent) ) {
         throw new Error(
             `The file ${filePath} has been modified since the base content was generated. 
             Please revert it to the original state before running this script. 
@@ -151,18 +152,21 @@ function checkFileContentIsSameOrThrow(filePath: MPFilePath, baseContent: MPFile
 }
 
 export function patchFileIfSafeOrThrow(
-    pathOfFileToPatch: MPFilePath,
-    baseContent: MPFileContent,
-    patch: MPPatchContent)
-{
+    filePatchToApply: MPFileToPatchToApply
+) {
+  const fileToPatch = filePatchToApply.fileToPatch;
+  const pathOfFileToPatch = fileToPatch.filePath;
   checkFileNotModifiedInGitOrThrow(pathOfFileToPatch); // just before writing - check again git status
-  checkFileContentIsSameOrThrow(pathOfFileToPatch, baseContent);
-  const patchedFileContents = applyPatchToViaStrings(patch, baseContent); /// WARNING: PATCH IS FIRST ARG, then ORIG content
+  checkFileContentIsSameOrThrow(pathOfFileToPatch, fileToPatch.baseContent);
+  const patchedFileContents = applyPatchToViaStrings(
+      filePatchToApply.patchContents,
+      fileToPatch.baseContent,
+  ); /// WARNING: PATCH IS FIRST ARG, then ORIG content
   // console.info("patchedFileContents: \n \n", patchedFileContents);
 
   console.log(
     "will write file (after checking git status) - patchedFilePath: ",
-    pathOfFileToPatch
+    coloredFilePath(pathOfFileToPatch)
   );
 
   fs.writeFileSync(pathOfFileToPatch, patchedFileContents);

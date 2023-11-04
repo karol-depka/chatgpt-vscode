@@ -2,7 +2,7 @@ import { blue, reset } from "../colors";
 import { makeCodeBlockForPrompt } from "../markdown/generateMarkdown";
 import { customGuidelines } from "./custom_guidelines";
 import { formattingGuidelines } from "./formattingGuidelines";
-import { FileToPatch } from "../patching/types";
+import { MPFileToPatch } from "../patching/types";
 import { MPFullLLMPrompt, MPUserPrompt } from "../types";
 import { MPPromptInputs } from "./types";
 

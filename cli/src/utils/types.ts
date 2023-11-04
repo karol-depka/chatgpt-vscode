@@ -5,6 +5,8 @@ export type MPPatchFilePath
   = string & { type: "MPPatchFilePath" };
 export type MPFileContent
   = string & { type: "MPFileContent" };
+export type MPFileContentBase
+  = string & { type: "MPFileContentBase" };
 export type MPFileType =
     string & { type: "MPFileType" };
 export type MPPatchContent =

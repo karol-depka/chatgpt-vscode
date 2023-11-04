@@ -1,5 +1,5 @@
 import {
-  MPFileContent,
+  MPFileContent, MPFileContentBase,
   MPFilePath,
   MPFileType,
   MPMarkDownContent,
@@ -10,7 +10,7 @@ import { blue, reset } from "../colors";
 
 export function makeCodeBlockForPrompt(
   filePath: MPFilePath,
-  fileContent: MPFileContent
+  fileContent: MPFileContent | MPFileContentBase,
   //   fileType: FileTypeString
 ): MPMarkDownContent {
   const fileType = "typescript"; // skipping for now coz maybe this prevents diff output

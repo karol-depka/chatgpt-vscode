@@ -6,12 +6,8 @@ import { MPPromptInputs } from "../prompting/types";
 import chalk from 'chalk'
 import { extractCodeFromMarkdown } from "../markdown/markdown_utils";
 import {main} from "./sendPromptStreaming";
+import {ChatCompletionCreateParams, ChatCompletionCreateParamsNonStreaming} from "openai/resources";
 dotenv.config();
-const idFun = <T>(x: T) => x;
-// const chalk = {
-//   green: idFun,
-//   inverse: idFun,
-// }
 
 export async function makeAndSendFullPrompt(promptInputs: MPPromptInputs) {
   const fullPromptTextToSend = makePrompt(promptInputs);
@@ -26,14 +22,18 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   });
 
   console.log(chalk.inverse("sendFullPrompt:"));
-  const chatCompletion = await openai.chat.completions.create({
+  const model = "gpt-3.5-turbo";
+  console.log('Using model ' + chalk.blue(model));
+  const body: ChatCompletionCreateParamsNonStreaming = {
     messages: [{ role: "user", content: fullPromptTextToSend }],
-    // model: "gpt-3.5-turbo",
-    model: "gpt-4",
+    model: model,
+    // model: "gpt-4",
     // temperature: 0,
     top_p: 0.1,
     // stream: true,
-  });
+  };
+  console.log(chalk.green("calling openai.chat.completions.create body", body));
+  const chatCompletion = await openai.chat.completions.create(body);
   // console.log(chalk.inverse("END sendFullPrompt"));
 
   // console.debug(`chatCompletion.choices`, chatCompletion.choices);
