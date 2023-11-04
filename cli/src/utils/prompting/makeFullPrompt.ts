@@ -7,7 +7,7 @@ import { MPFullLLMPrompt, MPUserPrompt } from "../types";
 import { MPPromptInputs } from "./types";
 
 /* Note: this makes GPT4 assumptions, like guidelines, markdown; will see how other LLM-s communicate */
-export function makePrompt(promptInputs: MPPromptInputs): MPFullLLMPrompt {
+export function makeFullPrompt(promptInputs: MPPromptInputs): MPFullLLMPrompt {
   const titledFileCodeBlocks = promptInputs.filesToPatch.map((f) =>
     makeCodeBlockForPrompt(f.filePath, f.baseContent /* TODO introduce MPFileWithTitleAndContents or smth */)
   );

@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import OpenAI from "openai";
-import { makePrompt } from "../prompting/makePrompt";
+import { makeFullPrompt } from "../prompting/makeFullPrompt";
 import { MPFullLLMPrompt, MPPatchContent } from "../types";
 import { MPPromptInputs } from "../prompting/types";
 import chalk from 'chalk'
@@ -10,7 +10,7 @@ import {ChatCompletionCreateParams, ChatCompletionCreateParamsNonStreaming} from
 dotenv.config();
 
 export async function makeAndSendFullPrompt(promptInputs: MPPromptInputs) {
-  const fullPromptTextToSend = makePrompt(promptInputs);
+  const fullPromptTextToSend = makeFullPrompt(promptInputs);
   // main();
   return sendFullPrompt(fullPromptTextToSend);
 }
