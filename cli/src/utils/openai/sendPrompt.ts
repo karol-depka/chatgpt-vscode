@@ -52,8 +52,8 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
     let chunkContent = chunk.choices[0].delta.content;
     fullOutput += chunkContent;
     process.stdout.write(chunkContent || '');
-    process.stdout.write('⚡');
   }
+  console.log('⚡ Finished receiving answer from OpenAI API\n');
 
   // console.debug(`chatCompletion.choices`, chatCompletion.choices);
   // const responseContent = completion.choices[0].message.content;
