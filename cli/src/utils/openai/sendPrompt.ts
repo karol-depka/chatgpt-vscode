@@ -51,7 +51,7 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
     // console.log('chunk', chunk.choices[0].delta.content);
     let chunkContent = chunk.choices[0].delta.content;
     fullOutput += chunkContent;
-    process.stdout.write(chunkContent !);
+    process.stdout.write(chunkContent || '');
   }
 
   // console.debug(`chatCompletion.choices`, chatCompletion.choices);
