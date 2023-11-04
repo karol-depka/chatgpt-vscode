@@ -59,10 +59,10 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   // console.debug(`chatCompletion.choices...`, responseContent);
   // console.log(chalk.green(`responseContent:${responseContent}`));
 
-  const responsePatch = '' as MPPatchContent;
-  // const responsePatch = extractCodeFromMarkdown(
-  //   responseContent!
-  // ) as MPPatchContent;
+  // const responsePatch = '' as MPPatchContent;
+  const responsePatch = extractCodeFromMarkdown(
+      fullOutput!
+  ) as MPPatchContent;
   return { chatCompletion: completion, responsePatch, printCostsFunc: () => {
     // FIXME
   } };
