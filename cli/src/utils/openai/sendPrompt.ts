@@ -22,14 +22,12 @@ export async function makeAndSendFullPrompt(promptInputs: MPPromptInputs) {
   return sendFullPrompt(fullPromptTextToSend);
 }
 
-function logDebugChunk(chunk: ChatCompletionChunk) {
-  if (opts.opts.debugChunks) {
-    // console.log('chunk', chunk.choices[0].delta.content);
-    console.log("");
-    console.log(chalk.yellow("==== chunk:"));
-    console.dir(chunk);
-    console.dir(chunk.choices);
-  }
+function logDebugChunk(chunk?: ChatCompletionChunk) {
+  // console.log('chunk', chunk.choices[0].delta.content);
+  console.log("");
+  console.log(chalk.yellow("==== chunk:"));
+  console.dir(chunk);
+  console.log("chunk?.choices: ", chunk?.choices);
 }
 
 export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
@@ -67,14 +65,21 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   console.log(`API request took ${timeTaken} seconds`);
   console.log(chalk.inverse(chalk.green(" Start response streaming ")));
   let fullOutput = "";
+  let mostRecentChunk: ChatCompletionChunk | undefined = undefined;
   for await (const chunk of completion) {
-    logDebugChunk(chunk);
+    mostRecentChunk = chunk;
+    if (opts.opts.debugChunks) {
+      logDebugChunk(chunk);
+    }
     let chunkContent = chunk.choices[0].delta.content;
     fullOutput += chunkContent;
     process.stdout.write(chunkContent || "");
   }
+
   console.log(); // newline
   console.log(chalk.inverse(chalk.green(" End response streaming ")));
+  console.log("mostRecentChunk: ");
+  logDebugChunk(mostRecentChunk);
   const t2 = performance.now();
   const streamingTimeTaken = ((t2 - t1) / 1000).toFixed(1);
   console.log(`Streaming response took ${streamingTimeTaken} seconds`);
