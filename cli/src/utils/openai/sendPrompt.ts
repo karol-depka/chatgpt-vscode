@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import dotenv from "dotenv";
 import OpenAI from "openai";
-import { makeFullPrompt } from "../prompting/makeFullPrompt";
-import { performance } from "perf_hooks";
-import { MPFullLLMPrompt, MPPatchContent } from "../types";
-import { MPPromptInputs } from "../prompting/types";
+import {makeFullPrompt} from "../prompting/makeFullPrompt";
+import {performance} from "perf_hooks";
+import {MPFullLLMPrompt, MPPatchContent} from "../types";
+import {MPPromptInputs} from "../prompting/types";
 import chalk from "chalk";
-import { extractCodeFromMarkdown } from "../markdown/markdown_utils";
-import { main } from "./sendPromptStreaming";
-import {
-  ChatCompletionCreateParams,
-  ChatCompletionCreateParamsNonStreaming,
-  ChatCompletionCreateParamsStreaming,
-} from "openai/resources";
+import {extractCodeFromMarkdown} from "../markdown/markdown_utils";
+import {ChatCompletionCreateParamsStreaming,} from "openai/resources";
+import {model} from "./model";
+
 dotenv.config();
 
 export async function makeAndSendFullPrompt(promptInputs: MPPromptInputs) {
@@ -36,9 +33,6 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   });
 
   console.log(chalk.inverse("sendFullPrompt:"));
-  // const model = "gpt-3.5-turbo";
-  // const model = "gpt-4";
-  const model = "anthropic/claude-2ZZZ"; // works interestingly;
   console.log("Using model " + chalk.blue(model));
   // const body: ChatCompletionCreateParamsNonStreaming = {
   const body: ChatCompletionCreateParamsStreaming = {
