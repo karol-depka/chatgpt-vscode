@@ -1,6 +1,3 @@
-// our code here
+// program starting
 
-console.table([
-  { name: 'Joe Biden', date: '2021-present' },
-  { name: 'Donald Trump', date: '2017-2021' },
-]);
+// program ending

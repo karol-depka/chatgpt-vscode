@@ -2,7 +2,10 @@
 // could run various combinations on those, automatically
 
 const g = {
-  files: ["Before each file you output, provide full file path."],
+  files: [
+    "Before each file you output, provide full file path.",
+    "Feel free to introduce new files it needed or if that will help keep the structure better. But keep in mind at which path original file was, that I provided you.",
+  ],
   printAsPatches: [
     "Always print me the output as .patch file that can be automatically applied to the original file I gave you. I cannot accept any other output format than patches.",
     `Ensure that the patch is valid.`,
@@ -21,18 +24,17 @@ const g = {
     // `Do not make unrelated changes to the file.`,
   ],
   brevity: [
-      "Don't print me explanations, nor pleasantries nor preambles like 'here you go' or 'you need to do this', just print me the code.", // TODO: this will prolly be fixed by `instruct` model
-      "Don't put comments in the code, unless something very unusual or tricky is happening in the code",
-  ]
+    "Don't print me explanations, nor pleasantries nor preambles like 'here you go' or 'you need to do this', just print me the code.", // TODO: this will prolly be fixed by `instruct` model
+    "Don't put comments in the code, unless something very unusual or tricky is happening in the code",
+  ],
 };
 export const formattingGuidelines = [
   "If there are source code comments in the file, keep them.",
   ...g.files,
   ...g.minimizeChanges,
-  // Mutually exclusive:
-  ...g.printAsFullFiles,
-  // ...g.printAsPatches,
-
   ...g.brevity,
 
+  // Mutually exclusive:
+  // ...g.printAsFullFiles,
+  ...g.printAsPatches,
 ];
