@@ -7,8 +7,11 @@ import {MPFullLLMPrompt, MPPatchContent} from "../types";
 import {MPPromptInputs} from "../prompting/types";
 import chalk from "chalk";
 import {extractCodeFromMarkdown} from "../markdown/markdown_utils";
-import {ChatCompletionCreateParamsStreaming,} from "openai/resources";
-import {model} from "./model";
+import {
+  ChatCompletionChunk,
+  ChatCompletionCreateParamsStreaming,
+} from "openai/resources";
+import { model } from "./model";
 
 dotenv.config();
 
@@ -16,6 +19,13 @@ export async function makeAndSendFullPrompt(promptInputs: MPPromptInputs) {
   const fullPromptTextToSend = makeFullPrompt(promptInputs);
   // main();
   return sendFullPrompt(fullPromptTextToSend);
+}
+
+function logDebugChunk(chunk: ChatCompletionChunk) {
+  // console.log('chunk', chunk.choices[0].delta.content);
+  console.log("");
+  console.log(chalk.yellow("==== chunk:"));
+  console.dir(chunk);
 }
 
 export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
@@ -52,7 +62,7 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   console.log(chalk.inverse(chalk.green("Start response streaming")));
   let fullOutput = "";
   for await (const chunk of completion) {
-    // console.log('chunk', chunk.choices[0].delta.content);
+    logDebugChunk(chunk);
     let chunkContent = chunk.choices[0].delta.content;
     fullOutput += chunkContent;
     process.stdout.write(chunkContent || "");
