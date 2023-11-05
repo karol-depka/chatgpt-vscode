@@ -138,8 +138,8 @@
       "activitybar": [
         {
           "id": "chatgpt",
-          "title": "chatGPT - MetaPrompt",
-          "icon": "resources/icon.png"
+          "title": "MetaPRO",
+          "icon": "resources/icon.svg"
         }
       ]
     },
