@@ -76,10 +76,12 @@ const inputFilePaths = (argv as any)._ as MPFilePath[];
 
 for (let inputFilePath of inputFilePaths) {
   console.log(blue + "inputFilePath: " + reset, coloredFilePath(inputFilePath));
-  checkFileNotModifiedInGitOrThrow(inputFilePath);
-  const isUncommitted = execSync(`git diff --name-only ${inputFilePath}`)
-    .toString()
-    .trim();
+  if (!dryRun) {
+    checkFileNotModifiedInGitOrThrow(inputFilePath);
+  }
+  //   const isUncommitted = execSync(`git diff --name-only ${inputFilePath}`)
+  //     .toString()
+  //     .trim();
   //   if (isUncommitted) {
   //     const answers = await inquirer.prompt([
   //       {
