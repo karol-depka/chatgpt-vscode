@@ -1,7 +1,7 @@
 
 // could run various combinations on those, automatically
 
-const guidelines = {
+const g = {
   files: ["Before each file you output, provide full file path."],
   printAsPatches: [
     "Always print me the output as .patch file that can be automatically applied to the original file I gave you. I cannot accept any other output format than patches.",
@@ -20,12 +20,19 @@ const guidelines = {
     // `Modify minimum number of lines.`,
     // `Do not make unrelated changes to the file.`,
   ],
+  brevity: [
+      "Don't print me explanations, nor pleasantries nor preambles like 'here you go' or 'you need to do this', just print me the code.", // TODO: this will prolly be fixed by `instruct` model
+      "Don't put comments in the code, unless something very unusual or tricky is happening in the code",
+  ]
 };
 export const formattingGuidelines = [
   "If there are source code comments in the file, keep them.",
-  ...guidelines.files,
-  ...guidelines.minimizeChanges,
+  ...g.files,
+  ...g.minimizeChanges,
   // Mutually exclusive:
-  // ...guidelines.printAsFullFiles,
-  ...guidelines.printAsPatches,
+  ...g.printAsFullFiles,
+  // ...g.printAsPatches,
+
+  ...g.brevity,
+
 ];
