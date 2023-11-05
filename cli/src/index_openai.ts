@@ -73,6 +73,7 @@ console.log(`dryRun: ${dryRun}`);
 console.log(
   yellow + "Welcome to " + red + " MetaPRO MetaPrompting Technology" + reset
 );
+console.log("llmModel: " + opts.opts.llmModel);
 
 const inputFilePaths = (argv as any)._ as MPFilePath[];
 

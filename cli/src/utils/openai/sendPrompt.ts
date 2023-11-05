@@ -11,8 +11,8 @@ import {
   ChatCompletionChunk,
   ChatCompletionCreateParamsStreaming,
 } from "openai/resources";
-import { model } from "./model";
 import { opts } from "../../opts/opts";
+import { getModelName } from "./model";
 
 dotenv.config();
 
@@ -47,11 +47,13 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   });
 
   console.log(chalk.inverse("sendFullPrompt:"));
-  console.log("Using model " + chalk.blue(model));
+  const modelNameOrAlias = opts.opts.llmModel;
+  const modelName = getModelName(modelNameOrAlias);
+  console.log("Using model " + chalk.blue(modelName));
   // const body: ChatCompletionCreateParamsNonStreaming = {
   const body: ChatCompletionCreateParamsStreaming = {
     messages: [{ role: "user", content: fullPromptTextToSend }],
-    model: model,
+    model: modelName,
     // temperature: 0,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     top_p: 0.1,
