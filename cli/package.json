@@ -18,6 +18,7 @@
     "chalk": "^4.1.2",
     "dotenv": "^16.3.1",
     "inquirer": "^9.2.11",
+    "langchain": "^0.0.180",
     "marked": "^9.1.5",
     "openai": "^4.14.2",
     "ts-node": "^version",
