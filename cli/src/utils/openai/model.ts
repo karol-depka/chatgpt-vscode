@@ -2,6 +2,8 @@ export const modelAliases = {
   llama: "meta-llama/codellama-34b-instruct",
   gpt4: "gpt-4",
   gpt3: "gpt-3.5-turbo",
+  palm: "google/palm-2-codechat-bison-32k",
+  claude: "anthropic/claude-2",
 };
 
 // export const model = "gpt-3.5-turbo";
