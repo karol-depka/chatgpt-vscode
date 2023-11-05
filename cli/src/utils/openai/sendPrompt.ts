@@ -26,6 +26,7 @@ function logDebugChunk(chunk: ChatCompletionChunk) {
   console.log("");
   console.log(chalk.yellow("==== chunk:"));
   console.dir(chunk);
+  console.dir(chunk.choices);
 }
 
 export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
