@@ -48,8 +48,8 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   // console.log(chalk.inverse("END sendFullPrompt"));
   const t1 = performance.now();
   const timeTaken = ((t1 - t0) / 1000).toFixed(1);
-  console.log(chalk.inverse(chalk.green("Start response streaming")));
   console.log(`API request took ${timeTaken} seconds`);
+  console.log(chalk.inverse(chalk.green("Start response streaming")));
   let fullOutput = "";
   for await (const chunk of completion) {
     // console.log('chunk', chunk.choices[0].delta.content);
