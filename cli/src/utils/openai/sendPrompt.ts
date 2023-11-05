@@ -54,6 +54,7 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   // console.log(chalk.inverse("END sendFullPrompt"));
   const t1 = performance.now();
   const timeTaken = ((t1 - t0) / 1000).toFixed(1);
+  console.log(chalk.inverse(chalk.green("Start response streaming")));
   console.log(`API request took ${timeTaken} seconds`);
   let fullOutput = "";
   for await (const chunk of completion) {
@@ -62,7 +63,13 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
     fullOutput += chunkContent;
     process.stdout.write(chunkContent || "");
   }
-  console.log("⚡ Finished receiving answer from OpenAI API\n");
+  console.log(); // newline
+  console.log(chalk.inverse(chalk.green("End response streaming")));
+  const t2 = performance.now();
+  const streamingTimeTaken = ((t2 - t1) / 1000).toFixed(1);
+  console.log(`Streaming response took ${streamingTimeTaken} seconds`);
+
+  // console.log("⚡ Finished receiving answer from OpenAI API\n");
 
   // console.debug(`chatCompletion.choices`, chatCompletion.choices);
   // const responseContent = completion.choices[0].message.content;
