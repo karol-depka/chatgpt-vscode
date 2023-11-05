@@ -15,13 +15,10 @@ import { coloredFilePath, readFileFromPath } from "./utils/fs/fsUtils";
 import { MPFileToPatch, MPFileToPatchToApply } from "./utils/patching/types";
 import { makeAndSendFullPrompt } from "./utils/openai/sendPrompt";
 import { executeFile } from "./utils/exec/execute_file";
+import { opts } from "./opts/opts";
+import { Args } from "./opts/opts.types";
 
 dotenv.config();
-
-export interface Args {
-  dontExec: boolean;
-  dryRun: boolean;
-}
 
 const argv = yargs(hideBin(process.argv)).options({
   dryRun: {
@@ -57,9 +54,14 @@ const argv = yargs(hideBin(process.argv)).options({
     description: "LLM Model name",
     default: "gpt-4",
   },
+  debugChunks: {
+    type: "boolean",
+    default: false,
+  },
 }).argv as Args;
 
 console.log(`argv: `, argv);
+opts.opts = argv;
 
 const userPrompt = (argv as any).prompt as MPUserPrompt;
 

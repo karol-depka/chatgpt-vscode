@@ -12,6 +12,7 @@ import {
   ChatCompletionCreateParamsStreaming,
 } from "openai/resources";
 import { model } from "./model";
+import { opts } from "../../opts/opts";
 
 dotenv.config();
 
@@ -22,11 +23,13 @@ export async function makeAndSendFullPrompt(promptInputs: MPPromptInputs) {
 }
 
 function logDebugChunk(chunk: ChatCompletionChunk) {
-  // console.log('chunk', chunk.choices[0].delta.content);
-  console.log("");
-  console.log(chalk.yellow("==== chunk:"));
-  console.dir(chunk);
-  console.dir(chunk.choices);
+  if (opts.opts.debugChunks) {
+    // console.log('chunk', chunk.choices[0].delta.content);
+    console.log("");
+    console.log(chalk.yellow("==== chunk:"));
+    console.dir(chunk);
+    console.dir(chunk.choices);
+  }
 }
 
 export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
@@ -60,7 +63,7 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   const t1 = performance.now();
   const timeTaken = ((t1 - t0) / 1000).toFixed(1);
   console.log(`API request took ${timeTaken} seconds`);
-  console.log(chalk.inverse(chalk.green("Start response streaming")));
+  console.log(chalk.inverse(chalk.green(" Start response streaming ")));
   let fullOutput = "";
   for await (const chunk of completion) {
     logDebugChunk(chunk);
@@ -69,7 +72,7 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
     process.stdout.write(chunkContent || "");
   }
   console.log(); // newline
-  console.log(chalk.inverse(chalk.green("End response streaming")));
+  console.log(chalk.inverse(chalk.green(" End response streaming ")));
   const t2 = performance.now();
   const streamingTimeTaken = ((t2 - t1) / 1000).toFixed(1);
   console.log(`Streaming response took ${streamingTimeTaken} seconds`);
@@ -87,6 +90,7 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
     chatCompletion: completion,
     responsePatch,
     printCostsFunc: () => {
+      // https://community.openai.com/t/when-we-use-streaming-with-open-ai-models-i-am-not-getting-the-token-count/328008
       // FIXME
     },
   };
