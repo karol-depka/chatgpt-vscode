@@ -14,7 +14,7 @@ import { MPFileContentBase, MPFilePath, MPUserPrompt } from "./utils/types";
 import { coloredFilePath, readFileFromPath } from "./utils/fs/fsUtils";
 import { MPFileToPatch, MPFileToPatchToApply } from "./utils/patching/types";
 import { makeAndSendFullPrompt } from "./utils/openai/sendPrompt";
-import { executeFile } from "./util/exec/execute_file";
+import { executeFile } from "./utils/exec/execute_file";
 
 dotenv.config();
 
