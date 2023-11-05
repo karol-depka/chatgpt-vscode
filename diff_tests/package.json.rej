@@ -1,16 +1,15 @@
 --- package.json
 +++ package.json
-@@ -167,6 +167,13 @@
+@@ -178,6 +178,12 @@
            "type": "boolean",
-           "default": true,
-           "description": "Append language id of the selected code to the codeblock (```language...code...```)",
-+          "order": 11
-+        },
-+        "chatgpt.xyz": {
-+          "type": "string",
-+          "default": "",
-+          "description": "Description for the xyz configuration option",
-+          "order": 12
+           "default": false,
+           "description": "New config option of type boolean; TEST",
+           "order": 12
          }
++      , "chatgpt.testFromChatGPT": {
++          "type": "string",
++          "description": "Test From ChatGPT",
++          "order": 13
++      }
++
        }
-     },

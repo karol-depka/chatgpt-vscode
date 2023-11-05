@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import { makeFullPrompt } from "../prompting/makeFullPrompt";
-import { performance } from 'perf_hooks';
+import { performance } from "perf_hooks";
 import { MPFullLLMPrompt, MPPatchContent } from "../types";
 import { MPPromptInputs } from "../prompting/types";
-import chalk from 'chalk'
+import chalk from "chalk";
 import { extractCodeFromMarkdown } from "../markdown/markdown_utils";
-import {main} from "./sendPromptStreaming";
+import { main } from "./sendPromptStreaming";
 import {
   ChatCompletionCreateParams,
   ChatCompletionCreateParamsNonStreaming,
-  ChatCompletionCreateParamsStreaming
+  ChatCompletionCreateParamsStreaming,
 } from "openai/resources";
 dotenv.config();
 
@@ -26,17 +27,24 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
 
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
+    baseURL: "https://openrouter.ai/api/v1",
+    defaultHeaders: {
+      "HTTP-Referer": "http://localhost:3000", // To identify your app. Can be set to e.g. http://localhost:3000 for testing
+      "X-Title": "MetaPRO CLI", // Optional. Shows on openrouter.ai
+    },
+    // dangerouslyAllowBrowser: true,
   });
 
   console.log(chalk.inverse("sendFullPrompt:"));
   // const model = "gpt-3.5-turbo";
   const model = "gpt-4";
-  console.log('Using model ' + chalk.blue(model));
+  console.log("Using model " + chalk.blue(model));
   // const body: ChatCompletionCreateParamsNonStreaming = {
   const body: ChatCompletionCreateParamsStreaming = {
     messages: [{ role: "user", content: fullPromptTextToSend }],
     model: model,
     // temperature: 0,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     top_p: 0.1,
     stream: true,
   };
@@ -46,14 +54,14 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   const t1 = performance.now();
   const timeTaken = ((t1 - t0) / 1000).toFixed(1);
   console.log(`API request took ${timeTaken} seconds`);
-  let fullOutput = ''
+  let fullOutput = "";
   for await (const chunk of completion) {
     // console.log('chunk', chunk.choices[0].delta.content);
     let chunkContent = chunk.choices[0].delta.content;
     fullOutput += chunkContent;
-    process.stdout.write(chunkContent || '');
+    process.stdout.write(chunkContent || "");
   }
-  console.log('⚡ Finished receiving answer from OpenAI API\n');
+  console.log("⚡ Finished receiving answer from OpenAI API\n");
 
   // console.debug(`chatCompletion.choices`, chatCompletion.choices);
   // const responseContent = completion.choices[0].message.content;
@@ -61,10 +69,12 @@ export async function sendFullPrompt(fullPromptTextToSend: MPFullLLMPrompt) {
   // console.log(chalk.green(`responseContent:${responseContent}`));
 
   // const responsePatch = '' as MPPatchContent;
-  const responsePatch = extractCodeFromMarkdown(
-      fullOutput!
-  ) as MPPatchContent;
-  return { chatCompletion: completion, responsePatch, printCostsFunc: () => {
-    // FIXME
-  } };
+  const responsePatch = extractCodeFromMarkdown(fullOutput!) as MPPatchContent;
+  return {
+    chatCompletion: completion,
+    responsePatch,
+    printCostsFunc: () => {
+      // FIXME
+    },
+  };
 }
